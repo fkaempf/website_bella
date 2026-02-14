@@ -207,11 +207,16 @@
     topLight.position.set(0, 1, 0);
     scene.add(topLight);
 
-    window.addEventListener('resize', () => {
+    function updateLayout() {
       camera.aspect = W() / H();
       camera.updateProjectionMatrix();
       renderer.setSize(W(), H());
-    });
+      camera.position.z = isMobile() ? 450 : 250;
+      if (neuronGroup) {
+        neuronGroup.position.x = isMobile() ? 0 : -45;
+      }
+    }
+    window.addEventListener('resize', updateLayout);
 
     /* Load GLB mesh */
     let neuronGroup = null;
