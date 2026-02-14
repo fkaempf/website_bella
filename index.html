@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
-  <script src="neuron_data.js"></script>
-
   <script type="importmap">
   {
     "imports": {
@@ -27,6 +25,14 @@
       color: #fff;
       min-height: 100vh;
       overflow: hidden;
+      background: #0f0c29;
+    }
+
+    /* Gradient layer — behind everything */
+    .gradient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #0f0c29);
       background-size: 400% 400%;
       animation: gradientShift 12s ease infinite;
@@ -37,8 +43,8 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Orbs */
-    .orb { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.35; pointer-events: none; z-index: 0; }
+    /* Orbs — behind neuron */
+    .orb { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.35; pointer-events: none; z-index: 1; }
     .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #e040fb, #7c4dff); top: -10%; left: -10%; animation: f1 18s ease-in-out infinite; }
     .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, #1de9b6); bottom: -15%; right: -10%; animation: f2 22s ease-in-out infinite; }
     .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #ff6090, #ff80ab); top: 40%; left: 50%; animation: f3 16s ease-in-out infinite; }
@@ -46,50 +52,41 @@
     @keyframes f2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-100px,-60px) scale(1.15)} 66%{transform:translate(80px,-120px) scale(.9)} }
     @keyframes f3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-140px,-100px) scale(1.08)} }
 
+    /* Neuron canvas — on top of gradient, behind text */
+    #neuron-canvas {
+      position: fixed;
+      top: 0; right: 0;
+      width: 60vw; height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     /* Grain */
-    body::after {
-      content: ''; position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.04;
+    .grain {
+      position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.04;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-repeat: repeat; background-size: 200px 200px;
     }
 
-    /* Layout: left text, right neuron */
-    .layout {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      min-height: 100vh;
-      padding: 4rem;
-    }
-
+    /* Text — on top of everything */
     .text-side {
-      flex: 0 0 45%;
-      max-width: 45%;
-    }
-
-    .neuron-side {
-      flex: 1;
       position: relative;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 4rem 5rem;
+      max-width: 50%;
     }
 
-    #neuron-canvas {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 55vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* Name */
     .name {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
       font-size: clamp(2.8rem, 5vw, 4.5rem);
       letter-spacing: 0.04em;
       text-transform: uppercase;
+      line-height: 1.1;
       background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #f5d0fe, #c4b5fd);
       background-size: 300% 300%;
       -webkit-background-clip: text; background-clip: text;
@@ -100,7 +97,17 @@
     }
     @keyframes ng { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
-    /* Coming Soon */
+    .tagline {
+      font-weight: 300;
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 1s .6s ease forwards;
+    }
+
     .coming-soon {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 800;
@@ -109,7 +116,7 @@
       letter-spacing: -0.02em;
       position: relative;
       opacity: 0; transform: translateY(40px);
-      animation: fadeUp 1s .7s ease forwards;
+      animation: fadeUp 1s .9s ease forwards;
     }
     .coming-soon .text-fill {
       background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,.7) 40%, #e0c3fc 60%, #8ec5fc 80%, #fff 100%);
@@ -126,59 +133,43 @@
       filter: blur(40px); opacity: .4; pointer-events: none; z-index: -1;
     }
     @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-
-    /* Pulse dot */
-    .pulse-dot {
-      margin-top: 2.5rem;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #8ec5fc;
-      box-shadow: 0 0 20px #8ec5fc, 0 0 60px rgba(142,197,252,.3);
-      animation: pulse 2.5s ease-in-out infinite, fadeUp 1s 1.1s ease forwards;
-      opacity: 0;
-    }
-    @keyframes pulse { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.6);opacity:.3} }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     /* Cursor glow */
     .cursor-glow {
       position: fixed; width: 300px; height: 300px; border-radius: 50%;
       background: radial-gradient(circle, rgba(142,197,252,.1), transparent 70%);
-      pointer-events: none; z-index: 2; transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 5; transform: translate(-50%,-50%);
       transition: left .15s ease-out, top .15s ease-out;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
-      .layout { flex-direction: column; padding: 3rem 2rem; justify-content: center; text-align: center; }
-      .text-side { flex: none; max-width: 100%; }
-      #neuron-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; opacity: 0.4; }
+      .text-side { max-width: 100%; padding: 3rem 2rem; text-align: center; }
+      #neuron-canvas { left: 0; right: auto; width: 100vw; opacity: 0.35; }
     }
   </style>
 </head>
 <body>
+  <div class="gradient-bg"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
-
   <canvas id="neuron-canvas"></canvas>
+  <div class="grain"></div>
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <div class="layout">
-    <div class="text-side">
-      <h1 class="name">Isabella<br>Beckett</h1>
-      <div class="coming-soon">
-        <span class="glow" aria-hidden="true">Coming<br>Soon</span>
-        <span class="text-fill">Coming<br>Soon</span>
-      </div>
-      <div class="pulse-dot"></div>
+  <div class="text-side">
+    <h1 class="name">Isabella<br>Beckett</h1>
+    <p class="tagline">Drosophila &middot; Neuroscience &middot; Connectomics</p>
+    <div class="coming-soon">
+      <span class="glow" aria-hidden="true">Coming<br>Soon</span>
+      <span class="text-fill">Coming<br>Soon</span>
     </div>
   </div>
 
   <script type="module">
     import * as THREE from 'three';
-    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-    import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
-    import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     /* Cursor */
     const cg = document.getElementById('cursorGlow');
@@ -187,9 +178,10 @@
       cg.style.top  = e.clientY + 'px';
     });
 
-    /* Three.js setup — right-side canvas */
+    /* Three.js — right half canvas */
     const canvas = document.getElementById('neuron-canvas');
-    const W = () => window.innerWidth * 0.55;
+    const isMobile = () => window.innerWidth <= 768;
+    const W = () => isMobile() ? window.innerWidth : Math.floor(window.innerWidth * 0.6);
     const H = () => window.innerHeight;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -197,108 +189,67 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.4;
 
     const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, W() / H(), 1, 50000);
-    camera.position.set(0, 0, 600);
+    const camera = new THREE.PerspectiveCamera(45, W() / H(), 0.1, 5000);
+    camera.position.set(0, 0, isMobile() ? 450 : 350);
 
-    scene.add(new THREE.AmbientLight(0x8888cc, 0.7));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    // Lighting
+    scene.add(new THREE.AmbientLight(0x6666aa, 0.8));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
     dirLight.position.set(1, 1, 1);
     scene.add(dirLight);
-    const rimLight = new THREE.DirectionalLight(0x8ec5fc, 0.4);
+    const rimLight = new THREE.DirectionalLight(0x8ec5fc, 0.5);
     rimLight.position.set(-1, -0.5, -1);
     scene.add(rimLight);
-
-    const composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(
-      new THREE.Vector2(W(), H()), 0.7, 0.5, 0.8
-    ));
+    const topLight = new THREE.DirectionalLight(0xe0c3fc, 0.4);
+    topLight.position.set(0, 1, 0);
+    scene.add(topLight);
 
     window.addEventListener('resize', () => {
       camera.aspect = W() / H();
       camera.updateProjectionMatrix();
       renderer.setSize(W(), H());
-      composer.setSize(W(), H());
     });
 
-    /* Build tube mesh neuron */
-    const cylGeo = new THREE.CylinderGeometry(1, 1, 1, 5, 1);
-    cylGeo.translate(0, 0.5, 0);
-    cylGeo.rotateX(Math.PI / 2);
+    /* Load GLB mesh */
+    let neuronGroup = null;
+    let neuronMaterial = null;
 
-    const _v1 = new THREE.Vector3();
-    const _v2 = new THREE.Vector3();
-    const _dir = new THREE.Vector3();
-    const _quat = new THREE.Quaternion();
-    const _up = new THREE.Vector3(0, 0, 1);
-    const _mat4 = new THREE.Matrix4();
-    const _scale = new THREE.Vector3();
+    const loader = new GLTFLoader();
+    loader.load('neuron.glb', (gltf) => {
+      const root = gltf.scene;
 
-    function buildNeuron(data, hue) {
-      const { n: nodes, e: edges, c: centroid, s: soma, b: bounds } = data;
-      const color = new THREE.Color().setHSL(hue, 0.6, 0.55);
-      const emissive = new THREE.Color().setHSL(hue, 0.8, 0.25);
+      // Neuron material
+      const color = new THREE.Color().setHSL(0.55, 0.6, 0.55);
+      const emissive = new THREE.Color().setHSL(0.55, 0.8, 0.25);
 
-      const mat = new THREE.MeshStandardMaterial({
-        color, emissive,
-        emissiveIntensity: 0.6,
-        roughness: 0.5,
-        metalness: 0.15,
+      neuronMaterial = new THREE.MeshStandardMaterial({
+        color,
+        emissive,
+        emissiveIntensity: 0.8,
+        roughness: 0.4,
+        metalness: 0.2,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.8,
+        side: THREE.DoubleSide,
       });
 
-      const mesh = new THREE.InstancedMesh(cylGeo, mat, edges.length);
-      const tubeR = 14;
+      root.traverse((child) => {
+        if (child.isMesh) {
+          child.material = neuronMaterial;
+          child.geometry.computeVertexNormals();
+        }
+      });
 
-      for (let i = 0; i < edges.length; i++) {
-        const [pI, cI] = edges[i];
-        const pn = nodes[pI], cn = nodes[cI];
-
-        _v1.set(pn[0] - centroid[0], pn[1] - centroid[1], pn[2] - centroid[2]);
-        _v2.set(cn[0] - centroid[0], cn[1] - centroid[1], cn[2] - centroid[2]);
-        _dir.subVectors(_v2, _v1);
-        const len = _dir.length();
-        if (len < 0.01) { _mat4.makeScale(0,0,0); mesh.setMatrixAt(i, _mat4); continue; }
-
-        _dir.normalize();
-        _quat.setFromUnitVectors(_up, _dir);
-        _scale.set(tubeR, tubeR, len);
-        _mat4.compose(_v1, _quat, _scale);
-        mesh.setMatrixAt(i, _mat4);
-      }
-      mesh.instanceMatrix.needsUpdate = true;
-
-      const group = new THREE.Group();
-      group.add(mesh);
-
-      if (soma) {
-        const sg = new THREE.SphereGeometry(35, 16, 16);
-        const sm = new THREE.MeshStandardMaterial({
-          color: 0xffffff, emissive: color, emissiveIntensity: 1.0,
-          transparent: true, opacity: 0.8, roughness: 0.3,
-        });
-        const sMesh = new THREE.Mesh(sg, sm);
-        sMesh.position.set(soma[0]-centroid[0], soma[1]-centroid[1], soma[2]-centroid[2]);
-        group.add(sMesh);
-      }
-
-      // Scale to fill the canvas nicely
-      const maxDim = Math.max(bounds.a[0]-bounds.i[0], bounds.a[1]-bounds.i[1], bounds.a[2]-bounds.i[2]);
-      const s = 500 / maxDim;
-      group.scale.set(s, s, s);
-
-      return { group, mat };
-    }
-
-    /* Init */
-    const nd = window.NEURON_DATA;
-    const neuronData = nd['pIP1'] || nd[Object.keys(nd)[0]];
-    const { group: neuron, mat: neuronMat } = buildNeuron(neuronData, 0.55);
-    scene.add(neuron);
+      // Mesh is already centered and scaled (max extent = 200)
+      neuronGroup = new THREE.Group();
+      neuronGroup.add(root);
+      scene.add(neuronGroup);
+    }, undefined, (err) => {
+      console.error('GLB load error:', err);
+    });
 
     /* Mouse */
     let mouseX = 0, mouseY = 0;
@@ -314,28 +265,26 @@
       requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      // Slow auto-rotation
-      neuron.rotation.y += 0.004;
-      neuron.rotation.x += 0.001;
-
-      // Mouse influence on rotation
-      neuron.rotation.x += (mouseY * 0.3 - neuron.rotation.x) * 0.01;
-
-      // Gentle float
-      neuron.position.y = Math.sin(t * 0.3) * 15;
+      if (neuronGroup) {
+        neuronGroup.rotation.y += 0.003;
+        neuronGroup.rotation.x = Math.sin(t * 0.15) * 0.15;
+        neuronGroup.position.y = Math.sin(t * 0.3) * 10;
+      }
 
       // Camera parallax
-      camera.position.x += (mouseX * 60 - camera.position.x) * 0.02;
-      camera.position.y += (-mouseY * 40 - camera.position.y) * 0.02;
+      camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
+      camera.position.y += (-mouseY * 30 - camera.position.y) * 0.02;
       camera.lookAt(0, 0, 0);
 
-      // Light rotation
+      // Rotating light
       dirLight.position.set(Math.sin(t * 0.3), Math.cos(t * 0.2), 1).normalize();
 
       // Breathing emissive
-      neuronMat.emissiveIntensity = 0.5 + 0.2 * Math.sin(t * 0.5);
+      if (neuronMaterial) {
+        neuronMaterial.emissiveIntensity = 0.6 + 0.3 * Math.sin(t * 0.5);
+      }
 
-      composer.render();
+      renderer.render(scene, camera);
     }
 
     animate();
