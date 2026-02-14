@@ -56,7 +56,7 @@
     #neuron-canvas {
       position: fixed;
       top: 0; right: 0;
-      width: 60vw; height: 100vh;
+      width: 65vw; height: 100vh;
       z-index: 2;
       pointer-events: none;
     }
@@ -181,7 +181,7 @@
     /* Three.js — right half canvas */
     const canvas = document.getElementById('neuron-canvas');
     const isMobile = () => window.innerWidth <= 768;
-    const W = () => isMobile() ? window.innerWidth : Math.floor(window.innerWidth * 0.6);
+    const W = () => isMobile() ? window.innerWidth : Math.floor(window.innerWidth * 0.65);
     const H = () => window.innerHeight;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -246,6 +246,8 @@
       // Mesh is already centered and scaled (max extent = 200)
       neuronGroup = new THREE.Group();
       neuronGroup.add(root);
+      // Shift slightly left so it doesn't clip the right edge
+      if (!isMobile()) neuronGroup.position.x = -20;
       scene.add(neuronGroup);
     }, undefined, (err) => {
       console.error('GLB load error:', err);
