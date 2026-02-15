@@ -12,6 +12,15 @@
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;700&display=swap"
     rel="stylesheet" />
 
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+
   <style>
     :root {
       --bg-primary: #0f0c29;
@@ -55,6 +64,13 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-repeat: repeat; background-size: 200px 200px;
     }
+    /* Neuron canvas */
+    #neuron-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 2; pointer-events: none;
+    }
+
 
     /* Hero */
     .hero {
@@ -360,6 +376,7 @@
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
   <div class="grain"></div>
+  <canvas id="neuron-canvas"></canvas>
 
   <!-- Hero -->
   <div class="hero">
@@ -645,5 +662,117 @@
       });
     });
   </script>
+
+  <!-- Three.js Neuron -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const canvas = document.getElementById('neuron-canvas');
+    const isMobile = () => window.innerWidth <= 768;
+    const W = () => window.innerWidth;
+    const H = () => window.innerHeight;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(W(), H());
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.4;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, W() / H(), 0.1, 5000);
+    camera.position.set(0, 0, isMobile() ? 450 : 250);
+
+    scene.add(new THREE.AmbientLight(0x6666aa, 0.8));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(1, 1, 1);
+    scene.add(dirLight);
+    const rimLight = new THREE.DirectionalLight(0x8ec5fc, 0.5);
+    rimLight.position.set(-1, -0.5, -1);
+    scene.add(rimLight);
+    const topLight = new THREE.DirectionalLight(0xe0c3fc, 0.4);
+    topLight.position.set(0, 1, 0);
+    scene.add(topLight);
+
+    function updateLayout() {
+      camera.aspect = W() / H();
+      camera.updateProjectionMatrix();
+      renderer.setSize(W(), H());
+      camera.position.z = isMobile() ? 450 : 250;
+      if (neuronGroup) neuronGroup.position.x = isMobile() ? 0 : 25;
+    }
+    window.addEventListener('resize', updateLayout);
+
+    let neuronGroup = null;
+    let neuronMaterial = null;
+
+    const loader = new GLTFLoader();
+    loader.load('../neuron.glb', (gltf) => {
+      const root = gltf.scene;
+      const color = new THREE.Color().setHSL(0.55, 0.6, 0.55);
+      const emissive = new THREE.Color().setHSL(0.55, 0.8, 0.25);
+
+      neuronMaterial = new THREE.MeshStandardMaterial({
+        color, emissive, emissiveIntensity: 0.8,
+        roughness: 0.4, metalness: 0.2,
+        transparent: true, opacity: 0.8,
+        side: THREE.DoubleSide,
+      });
+
+      root.traverse((child) => {
+        if (child.isMesh) { child.material = neuronMaterial; child.geometry.computeVertexNormals(); }
+      });
+
+      neuronGroup = new THREE.Group();
+      neuronGroup.add(root);
+      scene.add(neuronGroup);
+      neuronGroup.scale.setScalar(0.85);
+      neuronMaterial.opacity = 0;
+      neuronFadeStart = performance.now() + 1200;
+      updateLayout();
+    }, undefined, (err) => console.error('GLB load error:', err));
+
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', e => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    const clock = new THREE.Clock();
+    let neuronFadeStart = Infinity;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      if (neuronGroup) {
+        neuronGroup.rotation.y += 0.003;
+        neuronGroup.rotation.x = Math.sin(t * 0.15) * 0.15;
+        neuronGroup.position.y = Math.sin(t * 0.3) * 10;
+      }
+
+      if (neuronMaterial && neuronMaterial.opacity < 0.8) {
+        const now = performance.now();
+        if (now > neuronFadeStart) {
+          const elapsed = (now - neuronFadeStart) / 1500;
+          neuronMaterial.opacity = Math.min(0.8, elapsed * 0.8);
+        }
+      }
+
+      camera.position.x += (mouseX * 20 - camera.position.x) * 0.02;
+      camera.position.y += (-mouseY * 15 - camera.position.y) * 0.02;
+      camera.lookAt(0, 0, 0);
+
+      dirLight.position.set(Math.sin(t * 0.3), Math.cos(t * 0.2), 1).normalize();
+
+      if (neuronMaterial) neuronMaterial.emissiveIntensity = 0.6 + 0.3 * Math.sin(t * 0.5);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+
 </body>
 </html>
