@@ -1,49 +1,25 @@
 <!DOCTYPE html>
-<!-- v4 - Dot nav + liquid glass + neuron + BlurText + DecryptedText + ClickSpark -->
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Isabella Beckett | Drosophila Connectomics</title>
+  <title>Design Catalogue | Isabella Beckett</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;700&family=Outfit:wght@200;300;400;600;700;800&display=swap"
-    rel="stylesheet" />
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
-    }
-  }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg-primary: #0f0c29;
-      --text-primary: #e8e8e8;
-      --text-secondary: #a0a0a0;
-      --text-muted: #666;
-      --accent: #8ec5fc;
-      --accent-secondary: #e0c3fc;
-      --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Outfit', sans-serif;
-      color: #fff;
-      background: var(--bg-primary);
-      overflow: hidden;
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: #0f0c29;
+      color: #e8e8e8;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Background */
     .gradient-bg {
       position: fixed; inset: 0; z-index: 0;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #0f0c29);
@@ -52,672 +28,195 @@
     }
     @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    .orb { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.35; pointer-events: none; z-index: 1; }
-    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #e040fb, #7c4dff); top: -10%; left: -10%; animation: f1 18s ease-in-out infinite; }
-    .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, #1de9b6); bottom: -15%; right: -10%; animation: f2 22s ease-in-out infinite; }
-    .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #ff6090, #ff80ab); top: 40%; left: 50%; animation: f3 16s ease-in-out infinite; }
-    @keyframes f1 { 0%, 100% { transform: translate(0,0) scale(1) } 33% { transform: translate(120px,80px) scale(1.1) } 66% { transform: translate(-60px,140px) scale(.95) } }
-    @keyframes f2 { 0%, 100% { transform: translate(0,0) scale(1) } 33% { transform: translate(-100px,-60px) scale(1.15) } 66% { transform: translate(80px,-120px) scale(.9) } }
-    @keyframes f3 { 0%, 100% { transform: translate(0,0) scale(1) } 50% { transform: translate(-140px,-100px) scale(1.08) } }
-
-    /* Neuron canvas */
-    #neuron-canvas {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: 2; pointer-events: none;
-    }
-
-    /* Spark canvas */
-    #spark-canvas {
-      position: fixed; inset: 0;
-      z-index: 10; pointer-events: none;
-    }
-
     .grain {
-      position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.04;
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-repeat: repeat; background-size: 200px 200px;
     }
 
-    /* Hero — left side text */
-    .text-side {
-      position: relative; z-index: 4;
-      display: flex; flex-direction: column;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 4rem 5rem;
-      max-width: 50%;
+    .container {
+      position: relative; z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
     }
 
-    .profile-image {
-      width: 110px; height: 110px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08);
-      object-fit: cover; margin-bottom: 1.5rem;
-      opacity: 0; transform: scale(0.9);
-      animation: fadeInUp 0.8s ease 0.2s forwards;
-    }
-
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0) scale(1); } }
-
-    /* BlurText Name */
-    .name {
+    .page-title {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      letter-spacing: 0.04em;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      color: #fff;
-      position: relative;
+      margin-bottom: 0.5rem;
     }
 
-    .name-gradient-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #f5d0fe, #c4b5fd);
-      background-size: 300% 300%;
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: ng 6s ease infinite;
-      opacity: 0; transition: opacity 0.8s ease;
-      pointer-events: none;
-    }
-    .name-gradient-overlay.active { opacity: 1; }
-
-    .name .blur-letter {
-      display: inline-block;
-      filter: blur(10px); opacity: 0; transform: translateY(-20px);
-      transition: filter 0.6s ease, opacity 0.6s ease, transform 0.6s ease;
-    }
-    .name .blur-letter.revealed { filter: blur(0px); opacity: 1; transform: translateY(0); }
-
-    @keyframes ng { 0%, 100% { background-position: 0% 50% } 50% { background-position: 100% 50% } }
-
-    /* DecryptedText Tagline */
-    .tagline {
+    .page-subtitle {
       font-weight: 300;
-      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
-      letter-spacing: 0.2em;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 2.5rem;
-      min-height: 1.5em;
-    }
-    .tagline .encrypted-char { color: rgba(255,255,255,0.15); }
-    .tagline .revealed-char { color: rgba(255,255,255,0.4); }
-
-    /* Navigation dots — scattered in the right/neuron area */
-    .nav-dots-container {
-      position: fixed;
-      z-index: 5;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 3rem;
     }
 
-    .nav-dot {
-      position: absolute;
-      display: flex; align-items: center; gap: 0.8rem;
-      background: none; border: none;
-      cursor: pointer; padding: 0.5rem;
-      outline: none;
-      pointer-events: auto;
-      opacity: 0;
-      animation: fadeInUp 0.8s ease forwards;
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
     }
 
-    /* Position dots scattered in the right half / neuron area */
-    .nav-dot:nth-child(1) { top: 22%; right: 18%; animation-delay: 1.2s; }
-    .nav-dot:nth-child(2) { top: 42%; right: 8%; animation-delay: 1.5s; }
-    .nav-dot:nth-child(3) { top: 62%; right: 22%; animation-delay: 1.8s; }
-    .nav-dot:nth-child(4) { top: 78%; right: 12%; animation-delay: 2.1s; }
-
-    .dot-circle {
-      width: 14px; height: 14px; border-radius: 50%;
-      background: rgba(142, 197, 252, 0.5);
-      border: 1px solid rgba(142, 197, 252, 0.6);
-      box-shadow: 0 0 10px rgba(142, 197, 252, 0.3), 0 0 20px rgba(142, 197, 252, 0.1);
+    .card {
+      display: block;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
-      transition: all 0.4s ease;
-      flex-shrink: 0;
+      overflow: hidden;
     }
 
-    /* Cursor-click blink animation */
-    .dot-circle::before {
-      content: '';
-      position: absolute; inset: -6px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(142, 197, 252, 0.5);
-      opacity: 0;
-      animation: clickBlink 4s ease-in-out infinite;
-    }
-
-    .dot-circle::after {
-      content: '';
-      position: absolute; inset: -2px;
-      border-radius: 50%;
-      background: rgba(142, 197, 252, 0.15);
-      opacity: 0;
-      animation: clickBlink 4s ease-in-out infinite;
-      animation-delay: 0.1s;
-    }
-
-    .nav-dot:nth-child(1) .dot-circle::before,
-    .nav-dot:nth-child(1) .dot-circle::after { animation-delay: 0s; }
-    .nav-dot:nth-child(2) .dot-circle::before,
-    .nav-dot:nth-child(2) .dot-circle::after { animation-delay: 1s; }
-    .nav-dot:nth-child(3) .dot-circle::before,
-    .nav-dot:nth-child(3) .dot-circle::after { animation-delay: 2s; }
-    .nav-dot:nth-child(4) .dot-circle::before,
-    .nav-dot:nth-child(4) .dot-circle::after { animation-delay: 3s; }
-
-    @keyframes clickBlink {
-      0%, 85%, 100% { opacity: 0; transform: scale(1); }
-      90% { opacity: 1; transform: scale(1.8); }
-      95% { opacity: 0.3; transform: scale(2.2); }
-    }
-
-    .dot-label {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 0.75rem; font-weight: 400;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      transition: color 0.3s ease;
-      text-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    .nav-dot:hover .dot-circle {
-      background: rgba(142, 197, 252, 0.7);
-      border-color: rgba(142, 197, 252, 0.9);
-      box-shadow: 0 0 16px rgba(142, 197, 252, 0.5), 0 0 40px rgba(142, 197, 252, 0.2);
-      transform: scale(1.3);
-    }
-
-    .nav-dot:hover .dot-label {
-      color: rgba(255,255,255,0.85);
-    }
-
-    /* === LIQUID GLASS POPUP === */
-    .popup-overlay {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: center;
-      background: transparent;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-    .popup-overlay.active { opacity: 1; pointer-events: auto; }
-
-    .popup {
-      width: 90%; max-width: 620px; max-height: 75vh; overflow-y: auto;
-      border-radius: 28px; padding: 2.5rem; position: relative;
-
-      /* Enhanced liquid glass */
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.06) 0%,
-        rgba(142, 197, 252, 0.04) 30%,
-        rgba(224, 195, 252, 0.04) 60%,
-        rgba(255, 255, 255, 0.06) 100%
-      );
-      backdrop-filter: blur(40px) saturate(1.6) brightness(1.1);
-      -webkit-backdrop-filter: blur(40px) saturate(1.6) brightness(1.1);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-        0 1px 0 0 rgba(255, 255, 255, 0.1) inset,
-        0 -1px 0 0 rgba(255, 255, 255, 0.02) inset,
-        0 8px 40px rgba(0, 0, 0, 0.35),
-        0 0 120px rgba(142, 197, 252, 0.06),
-        0 0 60px rgba(224, 195, 252, 0.04);
-
-      /* Open animation */
-      transform: scale(0.9) translateY(30px);
-      opacity: 0;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-    }
-
-    .popup-overlay.active .popup {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-
-    /* Glass shine line at top */
-    .popup::before {
+    .card::before {
       content: '';
       position: absolute; top: 0; left: 10%; right: 10%;
       height: 1px;
-      background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        rgba(142, 197, 252, 0.3),
-        rgba(255, 255, 255, 0.2),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transition: all 0.4s ease;
     }
 
-    .popup::-webkit-scrollbar { width: 4px; }
-    .popup::-webkit-scrollbar-track { background: transparent; }
-    .popup::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-
-    .popup-close {
-      position: absolute; top: 1.2rem; right: 1.2rem;
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: rgba(255,255,255,0.5);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; transition: all 0.3s ease;
-    }
-    .popup-close:hover {
-      background: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.9);
-      border-color: rgba(255,255,255,0.2);
-      box-shadow: 0 0 12px rgba(142, 197, 252, 0.15);
+    .card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(142, 197, 252, 0.15);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 60px rgba(142, 197, 252, 0.05);
+      transform: translateY(-4px);
     }
 
-    .popup-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
-    .popup-title { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 1.5rem; margin-bottom: 1.5rem; }
-    .popup p { color: var(--text-secondary); font-weight: 300; font-size: 0.9rem; line-height: 1.75; margin-bottom: 1rem; }
-    .popup p:last-child { margin-bottom: 0; }
+    .card:hover::before {
+      background: linear-gradient(90deg, transparent, rgba(142, 197, 252, 0.2), transparent);
+    }
 
-    .pub-item { padding: 1.1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .pub-item:last-child { border-bottom: none; }
-    .pub-year { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.35rem; }
-    .pub-title { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.35rem; }
-    .pub-title a { color: var(--text-primary); text-decoration: none; transition: color var(--transition); }
-    .pub-title a:hover { color: var(--accent); }
-    .pub-authors { font-size: 0.78rem; font-weight: 300; color: var(--text-muted); margin-bottom: 0.2rem; }
-    .pub-authors .me { color: var(--text-secondary); font-weight: 400; }
-    .pub-journal { font-size: 0.78rem; font-style: italic; color: var(--text-muted); }
-    .pub-note { font-style: normal; font-size: 0.7rem; color: var(--accent-secondary); }
+    .card-badge {
+      display: inline-block;
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8ec5fc;
+      background: rgba(142, 197, 252, 0.08);
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+    }
 
-    .research-block { padding: 1.2rem; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); margin-bottom: 0.8rem; transition: background 0.3s ease, border-color 0.3s ease; }
-    .research-block:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
-    .research-block h3 { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .research-block p { font-size: 0.85rem; margin-bottom: 0; }
-    .research-tag { display: inline-block; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-secondary); margin-bottom: 0.4rem; }
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
 
-    .contact-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .contact-item:last-child { border-bottom: none; }
-    .contact-icon { color: var(--text-muted); flex-shrink: 0; }
-    .contact-item a { color: var(--text-secondary); text-decoration: none; font-weight: 300; font-size: 0.88rem; transition: color var(--transition); }
-    .contact-item a:hover { color: var(--accent); }
+    .card-desc {
+      font-weight: 300;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
 
-    @media (max-width: 768px) {
-      .text-side { max-width: 100%; padding: 3rem 2rem; text-align: center; align-items: center; }
-      .profile-image { width: 90px; height: 90px; }
-      #neuron-canvas { opacity: 0.35; }
-      .nav-dot:nth-child(1) { top: auto; right: auto; bottom: 28%; left: 15%; }
-      .nav-dot:nth-child(2) { top: auto; right: 15%; bottom: 22%; }
-      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 14%; left: 20%; }
-      .nav-dot:nth-child(4) { top: auto; right: 20%; bottom: 8%; }
-      .popup { width: 95%; max-height: 80vh; padding: 2rem 1.5rem; border-radius: 22px; }
+    .card-link {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      transition: color 0.3s ease;
+    }
+
+    .card:hover .card-link {
+      color: #8ec5fc;
+    }
+
+    .card-link::after {
+      content: ' \2192';
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin: 2rem 0;
+    }
+
+    .section-label {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #e0c3fc;
+      margin-bottom: 1.2rem;
     }
   </style>
 </head>
 
 <body>
   <div class="gradient-bg"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <canvas id="neuron-canvas"></canvas>
   <div class="grain"></div>
-  <canvas id="spark-canvas"></canvas>
 
-  <!-- Text side -->
-  <div class="text-side">
-    <img class="profile-image" src="../profile.jpeg" alt="Isabella Beckett" />
-    <h1 class="name" id="blur-name" aria-label="Isabella Beckett">
-      <span class="name-gradient-overlay" id="name-gradient" aria-hidden="true">Isabella<br>Beckett</span>
-    </h1>
-    <p class="tagline" id="decrypted-tagline" aria-label="Drosophila - Neuroscience - Connectomics"></p>
-  </div>
+  <div class="container">
+    <h1 class="page-title">Design Catalogue</h1>
+    <p class="page-subtitle">Navigation variants for isabellabeckett.com</p>
 
-  <!-- Navigation dots — scattered in the neuron area -->
-  <div class="nav-dots-container">
-    <button class="nav-dot" data-popup="about">
-      <span class="dot-circle"></span>
-      <span class="dot-label">About</span>
-    </button>
-    <button class="nav-dot" data-popup="publications">
-      <span class="dot-circle"></span>
-      <span class="dot-label">Publications</span>
-    </button>
-    <button class="nav-dot" data-popup="research">
-      <span class="dot-circle"></span>
-      <span class="dot-label">Research</span>
-    </button>
-    <button class="nav-dot" data-popup="contact">
-      <span class="dot-circle"></span>
-      <span class="dot-label">Contact</span>
-    </button>
-  </div>
+    <p class="section-label">Main</p>
+    <div class="card-grid">
+      <a class="card" href="../">
+        <span class="card-badge">Live</span>
+        <h2 class="card-title">Coming Soon</h2>
+        <p class="card-desc">Main landing page with 3D neuron, BlurText, DecryptedText, and ClickSpark animations.</p>
+        <span class="card-link">View page</span>
+      </a>
+    </div>
 
-  <!-- Popups -->
-  <div class="popup-overlay" id="popup-about">
-    <div class="popup">
-      <button class="popup-close">&times;</button>
-      <p class="popup-label">About</p>
-      <h2 class="popup-title">About</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+    <hr class="divider" />
+
+    <p class="section-label">Test Variants</p>
+    <div class="card-grid">
+      <a class="card" href="../floating-points/">
+        <span class="card-badge">Floating Points</span>
+        <h2 class="card-title">Floating Points</h2>
+        <p class="card-desc">Glowing dots scattered around the 3D neuron with cursor-click blink animations. Liquid glass popups. All text effects.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-bubble/">
+        <span class="card-badge">Bubble Menu</span>
+        <h2 class="card-title">Bubble Menu</h2>
+        <p class="card-desc">Floating bubble nav bar with hamburger toggle. Full-screen overlay with GSAP-animated pill-shaped links.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-dock/">
+        <span class="card-badge">Dock</span>
+        <h2 class="card-title">macOS Dock</h2>
+        <p class="card-desc">Bottom-centered dock with macOS-style magnification effect on hover. Icon-based navigation with tooltips.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-staggered/">
+        <span class="card-badge">Staggered</span>
+        <h2 class="card-title">Staggered Menu</h2>
+        <p class="card-desc">Slide-in side panel with GSAP staggered entrance animations. Large text menu items with numbered labels.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-pill/">
+        <span class="card-badge">Pill Nav</span>
+        <h2 class="card-title">Pill Navigation</h2>
+        <p class="card-desc">Horizontal pill nav bar at top with GSAP circle-reveal hover effect. Compact, always-visible navigation.</p>
+        <span class="card-link">View page</span>
+      </a>
     </div>
   </div>
-
-  <div class="popup-overlay" id="popup-publications">
-    <div class="popup">
-      <button class="popup-close">&times;</button>
-      <p class="popup-label">Publications</p>
-      <h2 class="popup-title">Publications</h2>
-      <div class="pub-item">
-        <p class="pub-year">2025</p>
-        <p class="pub-title"><a href="https://doi.org/10.1101/2025.10.09.680999" target="_blank" rel="noopener">Sexual dimorphism in the complete connectome of the <em>Drosophila</em> male central nervous system</a></p>
-        <p class="pub-authors">Berg S*, <span class="me">Beckett IR*</span>, Costa M*, Schlegel P*, ... Rubin GM, Jefferis GSXE</p>
-        <p class="pub-journal">bioRxiv <span class="pub-note">* Equal contribution</span></p>
-      </div>
-      <div class="pub-item">
-        <p class="pub-year">2025</p>
-        <p class="pub-title"><a href="https://doi.org/10.1101/2025.08.25.671814" target="_blank" rel="noopener">From Sensory Detection to Motor Action: The Comprehensive <em>Drosophila</em> Taste-Feeding Connectome</a></p>
-        <p class="pub-authors">Tastekin I, de Haan Vicente I, Beresford RJ, Morris BJ, <span class="me">Beckett I</span>, Schlegel P, Costa M, Jefferis GSXE, Ribeiro C</p>
-        <p class="pub-journal">bioRxiv</p>
-      </div>
-      <div class="pub-item">
-        <p class="pub-year">2025</p>
-        <p class="pub-title"><a href="https://doi.org/10.1101/2025.07.16.664682" target="_blank" rel="noopener">A Developmental Atlas of the <em>Drosophila</em> Nerve Cord Uncovers a Global Temporal Code for Neuronal Identity</a></p>
-        <p class="pub-authors">Cachero S, Mitletton M, <span class="me">Beckett IR</span>, Marin EC, Serratosa Capdevila L, Gkantia M, Lacin H, Jefferis GSXE, Don&agrave; E</p>
-        <p class="pub-journal">bioRxiv</p>
-      </div>
-      <div class="pub-item">
-        <p class="pub-year">2025</p>
-        <p class="pub-title"><a href="https://doi.org/10.1038/s41586-025-08925-z" target="_blank" rel="noopener">Comparative connectomics of <em>Drosophila</em> descending and ascending neurons</a></p>
-        <p class="pub-authors">St&uuml;rner T, Brooks P, Serratosa Capdevila L, Morris BJ, Javier A, Fang S, Gkantia M, Cachero S, <span class="me">Beckett IR</span>, Marin EC, Schlegel P, ... Costa M, Jefferis GSXE, Eichler K</p>
-        <p class="pub-journal">Nature 643, 158&ndash;172</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="popup-overlay" id="popup-research">
-    <div class="popup">
-      <button class="popup-close">&times;</button>
-      <p class="popup-label">Research</p>
-      <h2 class="popup-title">Research</h2>
-      <div class="research-block"><span class="research-tag">Current</span><h3>Lorem Ipsum Dolor Sit Amet</h3><p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></div>
-      <div class="research-block"><span class="research-tag">Methods</span><h3>Sed Ut Perspiciatis Unde Omnis</h3><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p></div>
-      <div class="research-block"><span class="research-tag">Collaboration</span><h3>At Vero Eos Et Accusamus</h3><p>Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate.</p></div>
-    </div>
-  </div>
-
-  <div class="popup-overlay" id="popup-contact">
-    <div class="popup">
-      <button class="popup-close">&times;</button>
-      <p class="popup-label">Contact</p>
-      <h2 class="popup-title">Contact</h2>
-      <div class="contact-item">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
-        <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener">Google Scholar Profile</a>
-      </div>
-      <div class="contact-item">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-        <a href="https://www2.mrc-lmb.cam.ac.uk/research/neurobiology/" target="_blank" rel="noopener">MRC LMB Neurobiology</a>
-      </div>
-      <div class="contact-item">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        <a href="mailto:placeholder@mrc-lmb.cam.ac.uk">placeholder@mrc-lmb.cam.ac.uk</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Text animations -->
-  <script>
-    // === BlurText Effect ===
-    (function initBlurText() {
-      var nameEl = document.getElementById('blur-name');
-      var lines = ['Isabella', 'Beckett'];
-      var DELAY_PER_LETTER = 50;
-      var BASE_DELAY = 300;
-      var letterIndex = 0;
-
-      lines.forEach(function(line, lineIdx) {
-        for (var i = 0; i < line.length; i++) {
-          var span = document.createElement('span');
-          span.classList.add('blur-letter');
-          span.textContent = line[i] === ' ' ? '\u00A0' : line[i];
-          span.dataset.index = letterIndex;
-          nameEl.appendChild(span);
-          letterIndex++;
-        }
-        if (lineIdx < lines.length - 1) nameEl.appendChild(document.createElement('br'));
-      });
-
-      var letters = nameEl.querySelectorAll('.blur-letter');
-      var totalLetters = letters.length;
-
-      setTimeout(function() {
-        letters.forEach(function(span, i) {
-          setTimeout(function() { span.classList.add('revealed'); }, i * DELAY_PER_LETTER);
-        });
-        setTimeout(function() {
-          document.getElementById('name-gradient').classList.add('active');
-        }, totalLetters * DELAY_PER_LETTER + 600);
-      }, BASE_DELAY);
-    })();
-
-    // === DecryptedText Effect ===
-    (function initDecryptedText() {
-      var taglineEl = document.getElementById('decrypted-tagline');
-      var finalText = 'Drosophila \u00B7 Neuroscience \u00B7 Connectomics';
-      var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      var speed = 40;
-      var BASE_DELAY = 1100;
-      var revealedSet = {};
-      var nextRevealIdx = 0;
-
-      function randomChar() { return chars[Math.floor(Math.random() * chars.length)]; }
-
-      function renderText() {
-        taglineEl.innerHTML = '';
-        for (var i = 0; i < finalText.length; i++) {
-          var ch = finalText[i];
-          var span = document.createElement('span');
-          if (ch === ' ' || ch === '\u00B7') { span.textContent = ch; }
-          else if (revealedSet[i]) { span.textContent = ch; span.className = 'revealed-char'; }
-          else { span.textContent = randomChar(); span.className = 'encrypted-char'; }
-          taglineEl.appendChild(span);
-        }
-      }
-
-      function startAnimation() {
-        renderText();
-        var interval = setInterval(function() {
-          while (nextRevealIdx < finalText.length && (finalText[nextRevealIdx] === ' ' || finalText[nextRevealIdx] === '\u00B7')) {
-            revealedSet[nextRevealIdx] = true; nextRevealIdx++;
-          }
-          if (nextRevealIdx < finalText.length) { revealedSet[nextRevealIdx] = true; nextRevealIdx++; }
-          renderText();
-          if (nextRevealIdx >= finalText.length) { clearInterval(interval); taglineEl.textContent = finalText; }
-        }, speed);
-      }
-
-      setTimeout(startAnimation, BASE_DELAY);
-    })();
-
-    // === ClickSpark Effect ===
-    (function initClickSpark() {
-      var canvas = document.getElementById('spark-canvas');
-      var ctx = canvas.getContext('2d');
-      var SPARK_COUNT = 8, SPARK_SIZE = 14, SPARK_RADIUS = 45, DURATION = 400, LINE_WIDTH = 2;
-      var sparks = [], isAnimating = false;
-
-      function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
-      function easeOut(t) { return t * (2 - t); }
-
-      function draw(timestamp) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (var i = sparks.length - 1; i >= 0; i--) {
-          var s = sparks[i];
-          var elapsed = timestamp - s.startTime;
-          if (elapsed >= DURATION) { sparks.splice(i, 1); continue; }
-          var progress = elapsed / DURATION, eased = easeOut(progress);
-          var dist = eased * SPARK_RADIUS, lineLen = SPARK_SIZE * (1 - eased), opacity = 1 - eased;
-          var x1 = s.x + dist * Math.cos(s.angle), y1 = s.y + dist * Math.sin(s.angle);
-          var x2 = s.x + (dist + lineLen) * Math.cos(s.angle), y2 = s.y + (dist + lineLen) * Math.sin(s.angle);
-          ctx.strokeStyle = s.colorIndex % 2 === 0 ? '#ffffff' : '#c4b5fd';
-          ctx.lineWidth = LINE_WIDTH; ctx.globalAlpha = opacity;
-          ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
-        if (sparks.length > 0) requestAnimationFrame(draw); else isAnimating = false;
-      }
-
-      function handleSpark(clientX, clientY) {
-        var now = performance.now();
-        for (var i = 0; i < SPARK_COUNT; i++) {
-          sparks.push({ x: clientX, y: clientY, angle: (2 * Math.PI * i) / SPARK_COUNT, startTime: now, colorIndex: i });
-        }
-        if (!isAnimating) { isAnimating = true; requestAnimationFrame(draw); }
-      }
-
-      document.addEventListener('click', function(e) { handleSpark(e.clientX, e.clientY); });
-      document.addEventListener('touchstart', function(e) { var t = e.touches[0]; handleSpark(t.clientX, t.clientY); });
-    })();
-
-    // === Navigation dots ===
-    document.querySelectorAll('.nav-dot').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var overlay = document.getElementById('popup-' + btn.dataset.popup);
-        if (overlay) overlay.classList.add('active');
-      });
-    });
-
-    document.querySelectorAll('.popup-overlay').forEach(function(ov) {
-      ov.addEventListener('click', function(e) { if (e.target === ov) ov.classList.remove('active'); });
-    });
-    document.querySelectorAll('.popup-close').forEach(function(btn) {
-      btn.addEventListener('click', function() { btn.closest('.popup-overlay').classList.remove('active'); });
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') document.querySelectorAll('.popup-overlay.active').forEach(function(ov) { ov.classList.remove('active'); });
-    });
-  </script>
-
-  <!-- Three.js Neuron -->
-  <script type="module">
-    import * as THREE from 'three';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-    const canvas = document.getElementById('neuron-canvas');
-    const isMobile = () => window.innerWidth <= 768;
-    const W = () => window.innerWidth;
-    const H = () => window.innerHeight;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(W(), H());
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.4;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, W() / H(), 0.1, 5000);
-    camera.position.set(0, 0, isMobile() ? 450 : 250);
-
-    scene.add(new THREE.AmbientLight(0x6666aa, 0.8));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(1, 1, 1);
-    scene.add(dirLight);
-    const rimLight = new THREE.DirectionalLight(0x8ec5fc, 0.5);
-    rimLight.position.set(-1, -0.5, -1);
-    scene.add(rimLight);
-    const topLight = new THREE.DirectionalLight(0xe0c3fc, 0.4);
-    topLight.position.set(0, 1, 0);
-    scene.add(topLight);
-
-    function updateLayout() {
-      camera.aspect = W() / H();
-      camera.updateProjectionMatrix();
-      renderer.setSize(W(), H());
-      camera.position.z = isMobile() ? 450 : 250;
-      if (neuronGroup) neuronGroup.position.x = isMobile() ? 0 : 25;
-    }
-    window.addEventListener('resize', updateLayout);
-
-    let neuronGroup = null;
-    let neuronMaterial = null;
-
-    const loader = new GLTFLoader();
-    loader.load('../neuron.glb', (gltf) => {
-      const root = gltf.scene;
-      const color = new THREE.Color().setHSL(0.55, 0.6, 0.55);
-      const emissive = new THREE.Color().setHSL(0.55, 0.8, 0.25);
-
-      neuronMaterial = new THREE.MeshStandardMaterial({
-        color, emissive, emissiveIntensity: 0.8,
-        roughness: 0.4, metalness: 0.2,
-        transparent: true, opacity: 0.8,
-        side: THREE.DoubleSide,
-      });
-
-      root.traverse((child) => {
-        if (child.isMesh) { child.material = neuronMaterial; child.geometry.computeVertexNormals(); }
-      });
-
-      neuronGroup = new THREE.Group();
-      neuronGroup.add(root);
-      scene.add(neuronGroup);
-      neuronGroup.scale.setScalar(0.85);
-      neuronMaterial.opacity = 0;
-      neuronFadeStart = performance.now() + 1200;
-      updateLayout();
-    }, undefined, (err) => console.error('GLB load error:', err));
-
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', e => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    const clock = new THREE.Clock();
-    let neuronFadeStart = Infinity;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
-
-      if (neuronGroup) {
-        neuronGroup.rotation.y += 0.003;
-        neuronGroup.rotation.x = Math.sin(t * 0.15) * 0.15;
-        neuronGroup.position.y = Math.sin(t * 0.3) * 10;
-      }
-
-      if (neuronMaterial && neuronMaterial.opacity < 0.8) {
-        const now = performance.now();
-        if (now > neuronFadeStart) {
-          const elapsed = (now - neuronFadeStart) / 1500;
-          neuronMaterial.opacity = Math.min(0.8, elapsed * 0.8);
-        }
-      }
-
-      camera.position.x += (mouseX * 20 - camera.position.x) * 0.02;
-      camera.position.y += (-mouseY * 15 - camera.position.y) * 0.02;
-      camera.lookAt(0, 0, 0);
-
-      dirLight.position.set(Math.sin(t * 0.3), Math.cos(t * 0.2), 1).normalize();
-
-      if (neuronMaterial) neuronMaterial.emissiveIntensity = 0.6 + 0.3 * Math.sin(t * 0.5);
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
 </body>
 
 </html>
