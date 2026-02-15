@@ -6,9 +6,9 @@
 
 var SEMANTIC_SCHOLAR_ID = '2305591080';
 
-// Papers with co-first authorship (DOI → list of co-first author name patterns)
+// Papers with co-first authorship (DOI → list of co-first author last names)
 var CO_FIRST_AUTHORS = {
-  '10.1101/2025.10.09.680999': ['Berg', 'Beckett', 'Costa', 'Schlegel']
+  '10.1101/2025.10.09.680999': ['Berg', 'Beckett', 'Costa', 'Schlegel', 'Januszewski', 'Marin', 'Nern', 'Preibisch', 'Qiu', 'Takemura']
 };
 
 // SVG icons for contact section
@@ -200,6 +200,15 @@ function loadPublications() {
             }
             return short;
           });
+          // Truncate after Isabella's name
+          var bellaIdx = -1;
+          for (var b = 0; b < formatted.length; b++) {
+            if (/Beckett/i.test(formatted[b])) { bellaIdx = b; break; }
+          }
+          if (bellaIdx >= 0 && bellaIdx < formatted.length - 1) {
+            formatted = formatted.slice(0, bellaIdx + 1);
+            formatted.push('...');
+          }
           authorsHtml = formatted.join(', ')
             .replace(/(I\.\s*(?:R\.\s*)?Beckett\*?)/gi, '<span class="me">$1</span>');
         }
