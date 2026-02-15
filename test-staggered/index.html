@@ -241,23 +241,32 @@
     .popup-overlay {
       position: fixed; inset: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(5,3,15,0.5);
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+      background: transparent;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
     }
     .popup-overlay.active { opacity: 1; pointer-events: auto; }
 
     .popup {
       width: 90%; max-width: 620px; max-height: 75vh; overflow-y: auto;
-      border-radius: 24px; padding: 2.5rem; position: relative;
-      background: rgba(15,12,41,0.55);
-      backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, 0 8px 32px rgba(0,0,0,0.4), 0 0 80px rgba(142,197,252,0.04);
-      transform: scale(0.92) translateY(20px); opacity: 0;
-      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+      border-radius: 28px; padding: 2.5rem; position: relative;
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.06) 0%, rgba(142,197,252,0.04) 30%,
+        rgba(224,195,252,0.04) 60%, rgba(255,255,255,0.06) 100%);
+      backdrop-filter: blur(40px) saturate(1.6) brightness(1.1);
+      -webkit-backdrop-filter: blur(40px) saturate(1.6) brightness(1.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 0 rgba(255,255,255,0.1) inset,
+        0 -1px 0 0 rgba(255,255,255,0.02) inset,
+        0 8px 40px rgba(0,0,0,0.35), 0 0 120px rgba(142,197,252,0.06), 0 0 60px rgba(224,195,252,0.04);
+      transform: scale(0.9) translateY(30px); opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
     }
     .popup-overlay.active .popup { transform: scale(1) translateY(0); opacity: 1; }
+    .popup::before {
+      content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), rgba(142,197,252,0.3), rgba(255,255,255,0.2), transparent);
+    }
     .popup::-webkit-scrollbar { width: 4px; }
     .popup::-webkit-scrollbar-track { background: transparent; }
     .popup::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
@@ -265,12 +274,13 @@
     .popup-close {
       position: absolute; top: 1.2rem; right: 1.2rem;
       width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.4); cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(255,255,255,0.5); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem; transition: all 0.3s ease;
     }
-    .popup-close:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+    .popup-close:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.2); box-shadow: 0 0 12px rgba(142,197,252,0.15); }
 
     .popup-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
     .popup-title { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 1.5rem; margin-bottom: 1.5rem; }
