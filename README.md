@@ -1,1 +1,1 @@
-Personal academic website for Isabella Beckett - isabellabeckett.com
+Personal academic website for Isabella Beckett - [isabellabeckett.com](isabellabeckett.com)
