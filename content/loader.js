@@ -158,22 +158,49 @@ function loadPublications() {
         return;
       }
 
-      // Deduplicate papers that share a DOI (e.g. preprint + published version)
-      var seen = {};
-      var publications = [];
-      papers.forEach(function(p) {
+      // Build publication objects
+      var allPubs = papers.map(function(p) {
         var doi = (p.externalIds && p.externalIds.DOI) || null;
-        var key = doi || p.title;
-        if (!seen[key]) {
-          seen[key] = true;
-          publications.push({
-            title: p.title || 'Untitled',
-            year: p.year || '',
-            venue: p.venue || 'Preprint',
-            doi: doi,
-            authors: (p.authors || []).map(function(a) { return a.name; })
-          });
+        var isBiorxiv = (doi && doi.indexOf('10.1101/') === 0) ||
+          (p.venue && /biorxiv/i.test(p.venue));
+        return {
+          title: p.title || 'Untitled',
+          year: p.year || '',
+          venue: p.venue || 'Preprint',
+          doi: doi,
+          isBiorxiv: isBiorxiv,
+          authors: (p.authors || []).map(function(a) { return a.name; })
+        };
+      });
+
+      // Normalize title for fuzzy matching (lowercase, strip punctuation/whitespace)
+      function normalize(t) {
+        return t.toLowerCase().replace(/[^a-z0-9]/g, '');
+      }
+
+      // Deduplicate: if a bioRxiv preprint has a published version, suppress the preprint
+      var publications = [];
+      var suppressedNorms = {};
+
+      // First pass: find published (non-bioRxiv) papers and record their normalized titles
+      var publishedNorms = {};
+      allPubs.forEach(function(pub) {
+        if (!pub.isBiorxiv) {
+          publishedNorms[normalize(pub.title)] = true;
         }
+      });
+
+      // Second pass: skip bioRxiv papers whose title matches a published paper
+      allPubs.forEach(function(pub) {
+        if (pub.isBiorxiv) {
+          var norm = normalize(pub.title);
+          // Check if any published title contains this one or vice versa
+          var dominated = Object.keys(publishedNorms).some(function(pn) {
+            return pn.indexOf(norm) >= 0 || norm.indexOf(pn) >= 0;
+          });
+          if (dominated) return; // skip this preprint
+        }
+        publications.push(pub);
       });
 
       // Sort by year descending
