@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Catalogue | Isabella Beckett</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: #0f0c29;
+      color: #e8e8e8;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .gradient-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #0f0c29);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+    }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .grain {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    .container {
+      position: relative; z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      font-weight: 300;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 3rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      display: block;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transition: all 0.4s ease;
+    }
+
+    .card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(142, 197, 252, 0.15);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 60px rgba(142, 197, 252, 0.05);
+      transform: translateY(-4px);
+    }
+
+    .card:hover::before {
+      background: linear-gradient(90deg, transparent, rgba(142, 197, 252, 0.2), transparent);
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8ec5fc;
+      background: rgba(142, 197, 252, 0.08);
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-weight: 300;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-link {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      transition: color 0.3s ease;
+    }
+
+    .card:hover .card-link {
+      color: #8ec5fc;
+    }
+
+    .card-link::after {
+      content: ' \2192';
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin: 2rem 0;
+    }
+
+    .section-label {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #e0c3fc;
+      margin-bottom: 1.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gradient-bg"></div>
+  <div class="grain"></div>
+
+  <div class="container">
+    <h1 class="page-title">Design Catalogue</h1>
+    <p class="page-subtitle">Navigation variants for isabellabeckett.com</p>
+
+    <p class="section-label">Main</p>
+    <div class="card-grid">
+      <a class="card" href="../">
+        <span class="card-badge">Live</span>
+        <h2 class="card-title">Coming Soon</h2>
+        <p class="card-desc">Main landing page with 3D neuron, BlurText, DecryptedText, and ClickSpark animations.</p>
+        <span class="card-link">View page</span>
+      </a>
+    </div>
+
+    <hr class="divider" />
+
+    <p class="section-label">Test Variants</p>
+    <div class="card-grid">
+      <a class="card" href="../test/">
+        <span class="card-badge">Dot Nav</span>
+        <h2 class="card-title">Dot Navigation</h2>
+        <p class="card-desc">Glowing dots scattered around the 3D neuron with cursor-click blink animations. Liquid glass popups. All text effects.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-bubble/">
+        <span class="card-badge">Bubble Menu</span>
+        <h2 class="card-title">Bubble Menu</h2>
+        <p class="card-desc">Floating bubble nav bar with hamburger toggle. Full-screen overlay with GSAP-animated pill-shaped links.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-dock/">
+        <span class="card-badge">Dock</span>
+        <h2 class="card-title">macOS Dock</h2>
+        <p class="card-desc">Bottom-centered dock with macOS-style magnification effect on hover. Icon-based navigation with tooltips.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-staggered/">
+        <span class="card-badge">Staggered</span>
+        <h2 class="card-title">Staggered Menu</h2>
+        <p class="card-desc">Slide-in side panel with GSAP staggered entrance animations. Large text menu items with numbered labels.</p>
+        <span class="card-link">View page</span>
+      </a>
+
+      <a class="card" href="../test-pill/">
+        <span class="card-badge">Pill Nav</span>
+        <h2 class="card-title">Pill Navigation</h2>
+        <p class="card-desc">Horizontal pill nav bar at top with GSAP circle-reveal hover effect. Compact, always-visible navigation.</p>
+        <span class="card-link">View page</span>
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>
