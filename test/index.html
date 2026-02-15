@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1 - Academic portfolio draft -->
+<!-- v3 - Minimal dot navigation + liquid glass popups -->
 <html lang="en">
 
 <head>
@@ -9,21 +9,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;700&display=swap"
     rel="stylesheet" />
 
   <style>
     :root {
       --bg-primary: #0f0c29;
-      --bg-card: rgba(255, 255, 255, 0.02);
-      --bg-card-hover: rgba(255, 255, 255, 0.04);
       --text-primary: #e8e8e8;
       --text-secondary: #a0a0a0;
-      --text-muted: #555;
+      --text-muted: #666;
       --accent: #8ec5fc;
       --accent-secondary: #e0c3fc;
-      --border: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(255, 255, 255, 0.12);
       --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -35,17 +31,12 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       font-family: 'IBM Plex Sans', sans-serif;
       color: var(--text-primary);
       background: var(--bg-primary);
-      overflow-x: hidden;
-      font-size: 15px;
-      line-height: 1.7;
+      overflow: hidden;
+      min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -68,8 +59,8 @@
     .orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.15;
+      filter: blur(100px);
+      opacity: 0.25;
       pointer-events: none;
       z-index: 0;
     }
@@ -92,6 +83,15 @@
       animation: f2 22s ease-in-out infinite;
     }
 
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, #ff6090, #ff80ab);
+      top: 40%;
+      left: 50%;
+      animation: f3 16s ease-in-out infinite;
+    }
+
     @keyframes f1 {
       0%, 100% { transform: translate(0, 0) scale(1) }
       33% { transform: translate(120px, 80px) scale(1.1) }
@@ -102,6 +102,11 @@
       0%, 100% { transform: translate(0, 0) scale(1) }
       33% { transform: translate(-100px, -60px) scale(1.15) }
       66% { transform: translate(80px, -120px) scale(.9) }
+    }
+
+    @keyframes f3 {
+      0%, 100% { transform: translate(0, 0) scale(1) }
+      50% { transform: translate(-140px, -100px) scale(1.08) }
     }
 
     .grain {
@@ -115,196 +120,268 @@
       background-size: 200px 200px;
     }
 
-    /* Layout */
-    .container {
+    /* Main layout — centered hero */
+    .hero {
       position: relative;
       z-index: 2;
       display: flex;
-      min-height: 100vh;
-    }
-
-    /* Profile card — fixed left */
-    .profile-card {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 380px;
-      height: 100vh;
-      display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 3rem 2.5rem;
-      z-index: 10;
+      min-height: 100vh;
+      padding: 4rem 6rem;
     }
 
     .profile-image {
-      width: 180px;
-      height: 180px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       object-fit: cover;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: fadeInUp 0.8s ease 0.2s forwards;
     }
 
-    .profile-name {
-      font-family: 'IBM Plex Serif', serif;
-      font-weight: 500;
-      font-size: 1.6rem;
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .profile-tagline {
-      font-weight: 300;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .social-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color var(--transition), transform var(--transition);
-      display: flex;
-      align-items: center;
-    }
-
-    .social-links a:hover {
-      color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* Navigation */
-    .nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      width: 100%;
-    }
-
-    .nav-item {
-      background: none;
-      border: none;
-      border-left: 2px solid transparent;
-      color: var(--text-secondary);
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 400;
-      padding: 0.6rem 1.2rem;
-      text-align: left;
-      cursor: pointer;
-      transition: all var(--transition);
+    .hero-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
       letter-spacing: 0.03em;
-    }
-
-    .nav-item:hover {
-      color: var(--text-primary);
-      border-left-color: var(--accent);
-      background: rgba(142, 197, 252, 0.03);
-    }
-
-    .nav-item.active {
-      color: var(--text-primary);
-      border-left-color: var(--accent);
-      background: rgba(142, 197, 252, 0.06);
-    }
-
-    /* Main content */
-    .main-content {
-      margin-left: 380px;
-      flex: 1;
-      padding: 4rem 4rem 6rem;
-      max-width: 720px;
-    }
-
-    /* Sections */
-    .section {
-      margin-bottom: 5rem;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 0.6rem;
+      color: #fff;
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      animation: fadeInUp 0.8s ease 0.4s forwards;
     }
 
-    .section.visible {
+    .hero-tagline {
+      font-weight: 300;
+      font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Navigation dots */
+    .nav-dots {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.9s forwards;
+    }
+
+    .nav-dot {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem 0;
+      outline: none;
+    }
+
+    .dot-circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      transition: all 0.4s ease;
+      flex-shrink: 0;
+    }
+
+    /* Pulse ring */
+    .dot-circle::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(142, 197, 252, 0.3);
+      animation: dotPulse 2.5s ease-in-out infinite;
+      opacity: 0;
+    }
+
+    .nav-dot:nth-child(1) .dot-circle::before { animation-delay: 0s; }
+    .nav-dot:nth-child(2) .dot-circle::before { animation-delay: 0.5s; }
+    .nav-dot:nth-child(3) .dot-circle::before { animation-delay: 1s; }
+    .nav-dot:nth-child(4) .dot-circle::before { animation-delay: 1.5s; }
+
+    @keyframes dotPulse {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.6);
+      }
+    }
+
+    .dot-label {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      transition: color 0.3s ease;
+    }
+
+    .nav-dot:hover .dot-circle {
+      background: rgba(142, 197, 252, 0.4);
+      border-color: rgba(142, 197, 252, 0.6);
+      box-shadow: 0 0 12px rgba(142, 197, 252, 0.3);
+      transform: scale(1.2);
+    }
+
+    .nav-dot:hover .dot-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Popup overlay */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5, 3, 15, 0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .popup-overlay.active {
       opacity: 1;
-      transform: translateY(0);
+      pointer-events: auto;
     }
 
-    .section-label {
-      font-size: 0.65rem;
+    /* Liquid glass popup */
+    .popup {
+      width: 90%;
+      max-width: 620px;
+      max-height: 75vh;
+      overflow-y: auto;
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative;
+
+      /* Liquid glass effect */
+      background: rgba(15, 12, 41, 0.55);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 80px rgba(142, 197, 252, 0.04);
+
+      /* Open animation */
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      opacity: 0;
+    }
+
+    .popup-overlay.active .popup {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Custom scrollbar inside popup */
+    .popup::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .popup::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .popup::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    /* Close button */
+    .popup-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .popup-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Popup content styles */
+    .popup-label {
+      font-size: 0.6rem;
       font-weight: 500;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1rem;
+      margin-bottom: 0.6rem;
     }
 
-    .section-title {
+    .popup-title {
       font-family: 'IBM Plex Serif', serif;
       font-weight: 500;
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
       color: var(--text-primary);
     }
 
-    .section p {
+    .popup p {
       color: var(--text-secondary);
       font-weight: 300;
-      margin-bottom: 1.2rem;
-    }
-
-    /* Research blocks */
-    .research-block {
-      padding: 1.5rem;
-      border-radius: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      line-height: 1.75;
       margin-bottom: 1rem;
-      transition: background var(--transition), border-color var(--transition);
     }
 
-    .research-block:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-hover);
-    }
-
-    .research-block h3 {
-      font-family: 'IBM Plex Serif', serif;
-      font-weight: 500;
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .research-block p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
+    .popup p:last-child {
       margin-bottom: 0;
-    }
-
-    .research-tag {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent-secondary);
-      margin-bottom: 0.5rem;
     }
 
     /* Publications */
     .pub-item {
-      padding: 1.25rem 0;
-      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .pub-item:last-child {
@@ -312,19 +389,19 @@
     }
 
     .pub-year {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 500;
       letter-spacing: 0.15em;
       color: var(--accent);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
     .pub-title {
       font-family: 'IBM Plex Serif', serif;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 0.95rem;
       line-height: 1.5;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
     .pub-title a {
@@ -338,10 +415,10 @@
     }
 
     .pub-authors {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 300;
       color: var(--text-muted);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.2rem;
     }
 
     .pub-authors .me {
@@ -350,24 +427,62 @@
     }
 
     .pub-journal {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-style: italic;
       color: var(--text-muted);
     }
 
     .pub-note {
       font-style: normal;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--accent-secondary);
     }
 
-    /* Contact */
+    /* Research blocks */
+    .research-block {
+      padding: 1.2rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 0.8rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .research-block:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .research-block h3 {
+      font-family: 'IBM Plex Serif', serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .research-block p {
+      font-size: 0.85rem;
+      margin-bottom: 0;
+    }
+
+    .research-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    /* Contact items */
     .contact-item {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid var(--border);
+      gap: 0.8rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .contact-item:last-child {
@@ -383,6 +498,7 @@
       color: var(--text-secondary);
       text-decoration: none;
       font-weight: 300;
+      font-size: 0.88rem;
       transition: color var(--transition);
     }
 
@@ -391,41 +507,26 @@
     }
 
     /* Responsive */
-    @media (max-width: 900px) {
-      .profile-card {
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding: 4rem 2rem 2rem;
+    @media (max-width: 768px) {
+      .hero {
+        padding: 3rem 2.5rem;
+        align-items: flex-start;
       }
 
-      .container {
-        flex-direction: column;
+      .profile-image {
+        width: 90px;
+        height: 90px;
       }
 
-      .main-content {
-        margin-left: 0;
-        padding: 2rem 1.5rem 4rem;
+      .nav-dots {
+        gap: 0.8rem;
       }
 
-      .nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .nav-item {
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        padding: 0.5rem 1rem;
-        font-size: 0.75rem;
-      }
-
-      .nav-item:hover,
-      .nav-item.active {
-        border-left-color: transparent;
-        border-bottom-color: var(--accent);
+      .popup {
+        width: 95%;
+        max-height: 80vh;
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
       }
     }
   </style>
@@ -435,215 +536,217 @@
   <div class="gradient-bg"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
   <div class="grain"></div>
 
-  <div class="container">
-    <!-- Profile Card -->
-    <aside class="profile-card">
-      <img class="profile-image" src="../profile.jpeg" alt="Isabella Beckett" />
-      <h1 class="profile-name">Isabella Beckett</h1>
-      <p class="profile-tagline">Drosophila &middot; Neuroscience &middot; Connectomics</p>
+  <!-- Hero -->
+  <div class="hero">
+    <img class="profile-image" src="../profile.jpeg" alt="Isabella Beckett" />
+    <h1 class="hero-name">Isabella<br>Beckett</h1>
+    <p class="hero-tagline">Drosophila &middot; Neuroscience &middot; Connectomics</p>
 
-      <div class="social-links">
-        <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
-        </a>
-        <a href="mailto:placeholder@mrc-lmb.cam.ac.uk" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        </a>
-      </div>
+    <nav class="nav-dots">
+      <button class="nav-dot" data-popup="about">
+        <span class="dot-circle"></span>
+        <span class="dot-label">About</span>
+      </button>
+      <button class="nav-dot" data-popup="publications">
+        <span class="dot-circle"></span>
+        <span class="dot-label">Publications</span>
+      </button>
+      <button class="nav-dot" data-popup="research">
+        <span class="dot-circle"></span>
+        <span class="dot-label">Research</span>
+      </button>
+      <button class="nav-dot" data-popup="contact">
+        <span class="dot-circle"></span>
+        <span class="dot-label">Contact</span>
+      </button>
+    </nav>
+  </div>
 
-      <nav class="nav">
-        <button class="nav-item active" data-section="about">About</button>
-        <button class="nav-item" data-section="publications">Publications</button>
-        <button class="nav-item" data-section="research">Research</button>
-        <button class="nav-item" data-section="contact">Contact</button>
-      </nav>
-    </aside>
+  <!-- Popup overlays -->
 
-    <!-- Content -->
-    <main class="main-content">
+  <!-- About -->
+  <div class="popup-overlay" id="popup-about">
+    <div class="popup">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">About</p>
+      <h2 class="popup-title">About</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+      <p>
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+        culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+      <p>
+        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
+        quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque
+        porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+      </p>
+    </div>
+  </div>
 
-      <!-- About -->
-      <div class="section visible" id="about">
-        <p class="section-label">About</p>
-        <h2 class="section-title">About</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  <!-- Publications -->
+  <div class="popup-overlay" id="popup-publications">
+    <div class="popup">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Publications</p>
+      <h2 class="popup-title">Publications</h2>
+
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title">
+          <a href="https://doi.org/10.1101/2025.10.09.680999" target="_blank" rel="noopener">
+            Sexual dimorphism in the complete connectome of the <em>Drosophila</em> male central nervous system
+          </a>
         </p>
-        <p>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-          fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
-          omnis iste natus error sit voluptatem.
+        <p class="pub-authors">
+          Berg S*, <span class="me">Beckett IR*</span>, Costa M*, Schlegel P*, ... Rubin GM, Jefferis GSXE
         </p>
+        <p class="pub-journal">bioRxiv <span class="pub-note">* Equal contribution</span></p>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title">
+          <a href="https://doi.org/10.1101/2025.08.25.671814" target="_blank" rel="noopener">
+            From Sensory Detection to Motor Action: The Comprehensive <em>Drosophila</em> Taste-Feeding Connectome
+          </a>
+        </p>
+        <p class="pub-authors">
+          Tastekin I, de Haan Vicente I, Beresford RJ, Morris BJ, <span class="me">Beckett I</span>, Schlegel P, Costa M, Jefferis GSXE, Ribeiro C
+        </p>
+        <p class="pub-journal">bioRxiv</p>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title">
+          <a href="https://doi.org/10.1101/2025.07.16.664682" target="_blank" rel="noopener">
+            A Developmental Atlas of the <em>Drosophila</em> Nerve Cord Uncovers a Global Temporal Code for Neuronal Identity
+          </a>
+        </p>
+        <p class="pub-authors">
+          Cachero S, Mitletton M, <span class="me">Beckett IR</span>, Marin EC, Serratosa Capdevila L, Gkantia M, Lacin H, Jefferis GSXE, Don&agrave; E
+        </p>
+        <p class="pub-journal">bioRxiv</p>
+      </div>
+
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title">
+          <a href="https://doi.org/10.1038/s41586-025-08925-z" target="_blank" rel="noopener">
+            Comparative connectomics of <em>Drosophila</em> descending and ascending neurons
+          </a>
+        </p>
+        <p class="pub-authors">
+          St&uuml;rner T, Brooks P, Serratosa Capdevila L, Morris BJ, Javier A, Fang S, Gkantia M, Cachero S, <span class="me">Beckett IR</span>, Marin EC, Schlegel P, ... Costa M, Jefferis GSXE, Eichler K
+        </p>
+        <p class="pub-journal">Nature 643, 158&ndash;172</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Research -->
+  <div class="popup-overlay" id="popup-research">
+    <div class="popup">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Research</p>
+      <h2 class="popup-title">Research</h2>
+
+      <div class="research-block">
+        <span class="research-tag">Current</span>
+        <h3>Lorem Ipsum Dolor Sit Amet</h3>
         <p>
-          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed
-          quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque
-          porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+          Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+          laboris nisi ut aliquip ex ea commodo consequat.
         </p>
       </div>
 
-      <!-- Publications -->
-      <div class="section" id="publications">
-        <p class="section-label">Publications</p>
-        <h2 class="section-title">Publications</h2>
-
-        <div class="pub-item">
-          <p class="pub-year">2025</p>
-          <p class="pub-title">
-            <a href="https://doi.org/10.1101/2025.10.09.680999" target="_blank" rel="noopener">
-              Sexual dimorphism in the complete connectome of the <em>Drosophila</em> male central nervous system
-            </a>
-          </p>
-          <p class="pub-authors">
-            Berg S*, <span class="me">Beckett IR*</span>, Costa M*, Schlegel P*, ... Rubin GM, Jefferis GSXE
-          </p>
-          <p class="pub-journal">bioRxiv <span class="pub-note">* Equal contribution</span></p>
-        </div>
-
-        <div class="pub-item">
-          <p class="pub-year">2025</p>
-          <p class="pub-title">
-            <a href="https://doi.org/10.1101/2025.08.25.671814" target="_blank" rel="noopener">
-              From Sensory Detection to Motor Action: The Comprehensive <em>Drosophila</em> Taste-Feeding Connectome
-            </a>
-          </p>
-          <p class="pub-authors">
-            Tastekin I, de Haan Vicente I, Beresford RJ, Morris BJ, <span class="me">Beckett I</span>, Schlegel P, Costa M, Jefferis GSXE, Ribeiro C
-          </p>
-          <p class="pub-journal">bioRxiv</p>
-        </div>
-
-        <div class="pub-item">
-          <p class="pub-year">2025</p>
-          <p class="pub-title">
-            <a href="https://doi.org/10.1101/2025.07.16.664682" target="_blank" rel="noopener">
-              A Developmental Atlas of the <em>Drosophila</em> Nerve Cord Uncovers a Global Temporal Code for Neuronal Identity
-            </a>
-          </p>
-          <p class="pub-authors">
-            Cachero S, Mitletton M, <span class="me">Beckett IR</span>, Marin EC, Serratosa Capdevila L, Gkantia M, Lacin H, Jefferis GSXE, Donà E
-          </p>
-          <p class="pub-journal">bioRxiv</p>
-        </div>
-
-        <div class="pub-item">
-          <p class="pub-year">2025</p>
-          <p class="pub-title">
-            <a href="https://doi.org/10.1038/s41586-025-08925-z" target="_blank" rel="noopener">
-              Comparative connectomics of <em>Drosophila</em> descending and ascending neurons
-            </a>
-          </p>
-          <p class="pub-authors">
-            Stürner T, Brooks P, Serratosa Capdevila L, Morris BJ, Javier A, Fang S, Gkantia M, Cachero S, <span class="me">Beckett IR</span>, Marin EC, Schlegel P, ... Costa M, Jefferis GSXE, Eichler K
-          </p>
-          <p class="pub-journal">Nature 643, 158–172</p>
-        </div>
+      <div class="research-block">
+        <span class="research-tag">Methods</span>
+        <h3>Sed Ut Perspiciatis Unde Omnis</h3>
+        <p>
+          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+          sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+        </p>
       </div>
 
-      <!-- Research -->
-      <div class="section" id="research">
-        <p class="section-label">Research</p>
-        <h2 class="section-title">Research</h2>
+      <div class="research-block">
+        <span class="research-tag">Collaboration</span>
+        <h3>At Vero Eos Et Accusamus</h3>
+        <p>
+          Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+          atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate.
+        </p>
+      </div>
+    </div>
+  </div>
 
-        <div class="research-block">
-          <span class="research-tag">Current</span>
-          <h3>Lorem Ipsum Dolor Sit Amet</h3>
-          <p>
-            Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-        </div>
+  <!-- Contact -->
+  <div class="popup-overlay" id="popup-contact">
+    <div class="popup">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Contact</p>
+      <h2 class="popup-title">Contact</h2>
 
-        <div class="research-block">
-          <span class="research-tag">Methods</span>
-          <h3>Sed Ut Perspiciatis Unde Omnis</h3>
-          <p>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-            sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-          </p>
-        </div>
-
-        <div class="research-block">
-          <span class="research-tag">Collaboration</span>
-          <h3>At Vero Eos Et Accusamus</h3>
-          <p>
-            Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-            atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate.
-          </p>
-        </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+        <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener">Google Scholar Profile</a>
       </div>
 
-      <!-- Contact -->
-      <div class="section" id="contact">
-        <p class="section-label">Contact</p>
-        <h2 class="section-title">Contact</h2>
-
-        <div class="contact-item">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
-          <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener">Google Scholar Profile</a>
-        </div>
-
-        <div class="contact-item">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          <a href="https://www2.mrc-lmb.cam.ac.uk/research/neurobiology/" target="_blank" rel="noopener">MRC LMB Neurobiology</a>
-        </div>
-
-        <div class="contact-item">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          <a href="mailto:placeholder@mrc-lmb.cam.ac.uk">placeholder@mrc-lmb.cam.ac.uk</a>
-        </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <a href="https://www2.mrc-lmb.cam.ac.uk/research/neurobiology/" target="_blank" rel="noopener">MRC LMB Neurobiology</a>
       </div>
 
-    </main>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <a href="mailto:placeholder@mrc-lmb.cam.ac.uk">placeholder@mrc-lmb.cam.ac.uk</a>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Scroll-based section visibility
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.section').forEach(function(el) {
-      observer.observe(el);
-    });
-
-    // Nav item click — scroll to section
-    document.querySelectorAll('.nav-item').forEach(function(btn) {
+    // Dot navigation — open popups
+    document.querySelectorAll('.nav-dot').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        var sectionId = btn.dataset.section;
-        var section = document.getElementById(sectionId);
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var popupId = 'popup-' + btn.dataset.popup;
+        var overlay = document.getElementById(popupId);
+        if (overlay) {
+          overlay.classList.add('active');
         }
-        // Update active state
-        document.querySelectorAll('.nav-item').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
       });
     });
 
-    // Update active nav on scroll
-    var sections = document.querySelectorAll('.section');
-    var navItems = document.querySelectorAll('.nav-item');
-
-    window.addEventListener('scroll', function() {
-      var scrollPos = window.scrollY + window.innerHeight * 0.3;
-      sections.forEach(function(section) {
-        if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
-          var id = section.id;
-          navItems.forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.section === id);
-          });
+    // Close popup — click overlay background or close button
+    document.querySelectorAll('.popup-overlay').forEach(function(overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          overlay.classList.remove('active');
         }
       });
+    });
+
+    document.querySelectorAll('.popup-close').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btn.closest('.popup-overlay').classList.remove('active');
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.popup-overlay.active').forEach(function(overlay) {
+          overlay.classList.remove('active');
+        });
+      }
     });
   </script>
 </body>
