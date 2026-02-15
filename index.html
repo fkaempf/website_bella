@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1 - Initial site: animated gradient, 3D neuron with fade-in, coming soon -->
+<!-- v2 - BlurText name, DecryptedText tagline, ClickSpark, StarBorder coming soon -->
 <html lang="en">
 
 <head>
@@ -49,17 +49,9 @@
     }
 
     @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Orbs — behind neuron */
@@ -100,47 +92,20 @@
     }
 
     @keyframes f1 {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1)
-      }
-
-      33% {
-        transform: translate(120px, 80px) scale(1.1)
-      }
-
-      66% {
-        transform: translate(-60px, 140px) scale(.95)
-      }
+      0%, 100% { transform: translate(0, 0) scale(1) }
+      33% { transform: translate(120px, 80px) scale(1.1) }
+      66% { transform: translate(-60px, 140px) scale(.95) }
     }
 
     @keyframes f2 {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1)
-      }
-
-      33% {
-        transform: translate(-100px, -60px) scale(1.15)
-      }
-
-      66% {
-        transform: translate(80px, -120px) scale(.9)
-      }
+      0%, 100% { transform: translate(0, 0) scale(1) }
+      33% { transform: translate(-100px, -60px) scale(1.15) }
+      66% { transform: translate(80px, -120px) scale(.9) }
     }
 
     @keyframes f3 {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1)
-      }
-
-      50% {
-        transform: translate(-140px, -100px) scale(1.08)
-      }
+      0%, 100% { transform: translate(0, 0) scale(1) }
+      50% { transform: translate(-140px, -100px) scale(1.08) }
     }
 
     /* Neuron canvas — on top of gradient, behind text */
@@ -151,6 +116,14 @@
       width: 100vw;
       height: 100vh;
       z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Spark canvas */
+    #spark-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
       pointer-events: none;
     }
 
@@ -178,6 +151,7 @@
       max-width: 50%;
     }
 
+    /* === BlurText Name === */
     .name {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
@@ -185,29 +159,39 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .name.gradient-active {
       background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #f5d0fe, #c4b5fd);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: ng 6s ease infinite, fadeUp 1s .3s ease forwards;
-      margin-bottom: 1.5rem;
+      animation: ng 6s ease infinite;
+    }
+
+    .name .blur-letter {
+      display: inline-block;
+      filter: blur(10px);
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(-20px);
+      transition: filter 0.6s ease, opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .name .blur-letter.revealed {
+      filter: blur(0px);
+      opacity: 1;
+      transform: translateY(0);
     }
 
     @keyframes ng {
-
-      0%,
-      100% {
-        background-position: 0% 50%
-      }
-
-      50% {
-        background-position: 100% 50%
-      }
+      0%, 100% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
     }
 
+    /* === DecryptedText Tagline === */
     .tagline {
       font-weight: 300;
       font-size: clamp(0.85rem, 1.5vw, 1.1rem);
@@ -215,11 +199,18 @@
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.4);
       margin-bottom: 2.5rem;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s .6s ease forwards;
+      min-height: 1.5em;
     }
 
+    .tagline .encrypted-char {
+      color: rgba(255, 255, 255, 0.15);
+    }
+
+    .tagline .revealed-char {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* === StarBorder Coming Soon === */
     .coming-soon {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 800;
@@ -227,9 +218,54 @@
       line-height: 1;
       letter-spacing: -0.02em;
       position: relative;
+      display: inline-block;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 3px;
       opacity: 0;
       transform: translateY(40px);
-      animation: fadeUp 1s .9s ease forwards;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .coming-soon.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .coming-soon .border-gradient-bottom {
+      position: absolute;
+      width: 300%;
+      height: 50%;
+      opacity: 0.7;
+      bottom: -12px;
+      right: -250%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #c4b5fd, transparent 10%);
+      animation: star-movement-bottom 4s linear infinite alternate;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .coming-soon .border-gradient-top {
+      position: absolute;
+      width: 300%;
+      height: 50%;
+      opacity: 0.7;
+      top: -12px;
+      left: -250%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #8ec5fc, transparent 10%);
+      animation: star-movement-top 4s linear infinite alternate;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .coming-soon .star-inner {
+      position: relative;
+      z-index: 1;
+      background: rgba(15, 12, 41, 0.7);
+      border-radius: 14px;
+      padding: 1rem 2rem;
     }
 
     .coming-soon .text-fill {
@@ -244,6 +280,9 @@
     .coming-soon .glow {
       position: absolute;
       inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
       -webkit-background-clip: text;
       background-clip: text;
@@ -254,25 +293,20 @@
       z-index: -1;
     }
 
+    @keyframes star-movement-bottom {
+      0% { transform: translate(0%, 0%); opacity: 1; }
+      100% { transform: translate(-100%, 0%); opacity: 0; }
+    }
+
+    @keyframes star-movement-top {
+      0% { transform: translate(0%, 0%); opacity: 1; }
+      100% { transform: translate(100%, 0%); opacity: 0; }
+    }
+
     @keyframes shimmer {
-
-      0%,
-      100% {
-        background-position: 0% 50%
-      }
-
-      50% {
-        background-position: 100% 50%
-      }
+      0%, 100% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
     }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
 
     @media (max-width: 768px) {
       .text-side {
@@ -296,15 +330,226 @@
   <div class="orb orb-3"></div>
   <canvas id="neuron-canvas"></canvas>
   <div class="grain"></div>
+  <canvas id="spark-canvas"></canvas>
 
   <div class="text-side">
-    <h1 class="name">Isabella<br>Beckett</h1>
-    <p class="tagline">Drosophila &middot; Neuroscience &middot; Connectomics</p>
-    <div class="coming-soon">
-      <span class="glow" aria-hidden="true">Coming<br>Soon</span>
-      <span class="text-fill">Coming<br>Soon</span>
+    <h1 class="name" id="blur-name" aria-label="Isabella Beckett"></h1>
+    <p class="tagline" id="decrypted-tagline" aria-label="Drosophila - Neuroscience - Connectomics"></p>
+    <div class="coming-soon" id="coming-soon">
+      <div class="border-gradient-bottom"></div>
+      <div class="border-gradient-top"></div>
+      <div class="star-inner">
+        <span class="glow" aria-hidden="true">Coming<br>Soon</span>
+        <span class="text-fill">Coming<br>Soon</span>
+      </div>
     </div>
   </div>
+
+  <!-- Text animation effects (non-module) -->
+  <script>
+    // === BlurText Effect ===
+    (function initBlurText() {
+      const nameEl = document.getElementById('blur-name');
+      const lines = ['Isabella', 'Beckett'];
+      const DELAY_PER_LETTER = 50;
+      const BASE_DELAY = 300;
+
+      let letterIndex = 0;
+      lines.forEach(function(line, lineIdx) {
+        for (var i = 0; i < line.length; i++) {
+          var span = document.createElement('span');
+          span.classList.add('blur-letter');
+          span.textContent = line[i] === ' ' ? '\u00A0' : line[i];
+          span.dataset.index = letterIndex;
+          nameEl.appendChild(span);
+          letterIndex++;
+        }
+        if (lineIdx < lines.length - 1) {
+          nameEl.appendChild(document.createElement('br'));
+        }
+      });
+
+      var letters = nameEl.querySelectorAll('.blur-letter');
+      var totalLetters = letters.length;
+
+      setTimeout(function() {
+        letters.forEach(function(span, i) {
+          setTimeout(function() {
+            span.classList.add('revealed');
+          }, i * DELAY_PER_LETTER);
+        });
+
+        // After all letters revealed, switch to gradient text
+        setTimeout(function() {
+          nameEl.innerHTML = 'Isabella<br>Beckett';
+          nameEl.classList.add('gradient-active');
+        }, totalLetters * DELAY_PER_LETTER + 600 + 300);
+      }, BASE_DELAY);
+    })();
+
+    // === DecryptedText Effect ===
+    (function initDecryptedText() {
+      var taglineEl = document.getElementById('decrypted-tagline');
+      var finalText = 'Drosophila \u00B7 Neuroscience \u00B7 Connectomics';
+      var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      var speed = 40;
+      var BASE_DELAY = 1100;
+
+      var revealedSet = {};
+      var nextRevealIdx = 0;
+
+      function randomChar() {
+        return chars[Math.floor(Math.random() * chars.length)];
+      }
+
+      function renderText() {
+        taglineEl.innerHTML = '';
+        for (var i = 0; i < finalText.length; i++) {
+          var ch = finalText[i];
+          var span = document.createElement('span');
+          if (ch === ' ' || ch === '\u00B7') {
+            span.textContent = ch;
+          } else if (revealedSet[i]) {
+            span.textContent = ch;
+            span.className = 'revealed-char';
+          } else {
+            span.textContent = randomChar();
+            span.className = 'encrypted-char';
+          }
+          taglineEl.appendChild(span);
+        }
+      }
+
+      function startAnimation() {
+        // Show initial scramble
+        renderText();
+
+        var interval = setInterval(function() {
+          // Reveal next non-space character
+          while (nextRevealIdx < finalText.length &&
+                 (finalText[nextRevealIdx] === ' ' || finalText[nextRevealIdx] === '\u00B7')) {
+            revealedSet[nextRevealIdx] = true;
+            nextRevealIdx++;
+          }
+          if (nextRevealIdx < finalText.length) {
+            revealedSet[nextRevealIdx] = true;
+            nextRevealIdx++;
+          }
+          renderText();
+
+          if (nextRevealIdx >= finalText.length) {
+            clearInterval(interval);
+            // Final clean render
+            taglineEl.textContent = finalText;
+          }
+        }, speed);
+      }
+
+      setTimeout(startAnimation, BASE_DELAY);
+    })();
+
+    // === Coming Soon Reveal ===
+    (function initComingSoon() {
+      var el = document.getElementById('coming-soon');
+      setTimeout(function() {
+        el.classList.add('visible');
+      }, 2600);
+    })();
+
+    // === ClickSpark Effect ===
+    (function initClickSpark() {
+      var canvas = document.getElementById('spark-canvas');
+      var ctx = canvas.getContext('2d');
+
+      var SPARK_COUNT = 8;
+      var SPARK_SIZE = 14;
+      var SPARK_RADIUS = 45;
+      var DURATION = 400;
+      var LINE_WIDTH = 2;
+
+      var sparks = [];
+      var isAnimating = false;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      function easeOut(t) {
+        return t * (2 - t);
+      }
+
+      function draw(timestamp) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = sparks.length - 1; i >= 0; i--) {
+          var spark = sparks[i];
+          var elapsed = timestamp - spark.startTime;
+
+          if (elapsed >= DURATION) {
+            sparks.splice(i, 1);
+            continue;
+          }
+
+          var progress = elapsed / DURATION;
+          var eased = easeOut(progress);
+
+          var distance = eased * SPARK_RADIUS;
+          var lineLength = SPARK_SIZE * (1 - eased);
+          var opacity = 1 - eased;
+
+          var x1 = spark.x + distance * Math.cos(spark.angle);
+          var y1 = spark.y + distance * Math.sin(spark.angle);
+          var x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
+          var y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
+
+          ctx.strokeStyle = spark.colorIndex % 2 === 0 ? '#ffffff' : '#c4b5fd';
+          ctx.lineWidth = LINE_WIDTH;
+          ctx.globalAlpha = opacity;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+
+        if (sparks.length > 0) {
+          requestAnimationFrame(draw);
+        } else {
+          isAnimating = false;
+        }
+      }
+
+      function handleSpark(clientX, clientY) {
+        var now = performance.now();
+        for (var i = 0; i < SPARK_COUNT; i++) {
+          sparks.push({
+            x: clientX,
+            y: clientY,
+            angle: (2 * Math.PI * i) / SPARK_COUNT,
+            startTime: now,
+            colorIndex: i
+          });
+        }
+        if (!isAnimating) {
+          isAnimating = true;
+          requestAnimationFrame(draw);
+        }
+      }
+
+      document.addEventListener('click', function(e) {
+        handleSpark(e.clientX, e.clientY);
+      });
+
+      document.addEventListener('touchstart', function(e) {
+        var touch = e.touches[0];
+        handleSpark(touch.clientX, touch.clientY);
+      });
+    })();
+  </script>
 
   <script type="module">
     import * as THREE from 'three';
