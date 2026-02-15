@@ -205,9 +205,10 @@ function loadPublications() {
           for (var b = 0; b < formatted.length; b++) {
             if (/Beckett/i.test(formatted[b])) { bellaIdx = b; break; }
           }
-          if (bellaIdx >= 0 && bellaIdx < formatted.length - 1) {
+          if (bellaIdx >= 0 && bellaIdx < formatted.length - 3) {
+            var lastTwo = formatted.slice(-2);
             formatted = formatted.slice(0, bellaIdx + 1);
-            formatted.push('...');
+            formatted.push('...', lastTwo[0], lastTwo[1]);
           }
           authorsHtml = formatted.join(', ')
             .replace(/(I\.\s*(?:R\.\s*)?Beckett\*?)/gi, '<span class="me">$1</span>');
