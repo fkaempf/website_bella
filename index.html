@@ -1,12 +1,16 @@
 <!DOCTYPE html>
+<!-- v1 - Initial site: animated gradient, 3D neuron with fade-in, coming soon -->
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Isabella Beckett</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
 
   <script type="importmap">
   {
@@ -18,7 +22,13 @@
   </script>
 
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Outfit', sans-serif;
@@ -37,35 +47,123 @@
       background-size: 400% 400%;
       animation: gradientShift 12s ease infinite;
     }
+
     @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     /* Orbs — behind neuron */
-    .orb { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.35; pointer-events: none; z-index: 1; }
-    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #e040fb, #7c4dff); top: -10%; left: -10%; animation: f1 18s ease-in-out infinite; }
-    .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, #1de9b6); bottom: -15%; right: -10%; animation: f2 22s ease-in-out infinite; }
-    .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #ff6090, #ff80ab); top: 40%; left: 50%; animation: f3 16s ease-in-out infinite; }
-    @keyframes f1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(120px,80px) scale(1.1)} 66%{transform:translate(-60px,140px) scale(.95)} }
-    @keyframes f2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-100px,-60px) scale(1.15)} 66%{transform:translate(80px,-120px) scale(.9)} }
-    @keyframes f3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-140px,-100px) scale(1.08)} }
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #e040fb, #7c4dff);
+      top: -10%;
+      left: -10%;
+      animation: f1 18s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #00e5ff, #1de9b6);
+      bottom: -15%;
+      right: -10%;
+      animation: f2 22s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #ff6090, #ff80ab);
+      top: 40%;
+      left: 50%;
+      animation: f3 16s ease-in-out infinite;
+    }
+
+    @keyframes f1 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      33% {
+        transform: translate(120px, 80px) scale(1.1)
+      }
+
+      66% {
+        transform: translate(-60px, 140px) scale(.95)
+      }
+    }
+
+    @keyframes f2 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      33% {
+        transform: translate(-100px, -60px) scale(1.15)
+      }
+
+      66% {
+        transform: translate(80px, -120px) scale(.9)
+      }
+    }
+
+    @keyframes f3 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      50% {
+        transform: translate(-140px, -100px) scale(1.08)
+      }
+    }
 
     /* Neuron canvas — on top of gradient, behind text */
     #neuron-canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 2;
       pointer-events: none;
     }
 
     /* Grain */
     .grain {
-      position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.04;
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0.04;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-repeat: repeat; background-size: 200px 200px;
+      background-repeat: repeat;
+      background-size: 200px 200px;
     }
 
     /* Text — on top of everything */
@@ -89,22 +187,36 @@
       line-height: 1.1;
       background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #f5d0fe, #c4b5fd);
       background-size: 300% 300%;
-      -webkit-background-clip: text; background-clip: text;
+      -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: ng 6s ease infinite, fadeUp 1s .3s ease forwards;
       margin-bottom: 1.5rem;
-      opacity: 0; transform: translateY(30px);
+      opacity: 0;
+      transform: translateY(30px);
     }
-    @keyframes ng { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+    @keyframes ng {
+
+      0%,
+      100% {
+        background-position: 0% 50%
+      }
+
+      50% {
+        background-position: 100% 50%
+      }
+    }
 
     .tagline {
       font-weight: 300;
       font-size: clamp(0.85rem, 1.5vw, 1.1rem);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       margin-bottom: 2.5rem;
-      opacity: 0; transform: translateY(20px);
+      opacity: 0;
+      transform: translateY(20px);
       animation: fadeUp 1s .6s ease forwards;
     }
 
@@ -115,40 +227,68 @@
       line-height: 1;
       letter-spacing: -0.02em;
       position: relative;
-      opacity: 0; transform: translateY(40px);
+      opacity: 0;
+      transform: translateY(40px);
       animation: fadeUp 1s .9s ease forwards;
     }
+
     .coming-soon .text-fill {
-      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,.7) 40%, #e0c3fc 60%, #8ec5fc 80%, #fff 100%);
+      background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, .7) 40%, #e0c3fc 60%, #8ec5fc 80%, #fff 100%);
       background-size: 200% 200%;
-      -webkit-background-clip: text; background-clip: text;
+      -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: shimmer 4s ease-in-out infinite;
     }
-    .coming-soon .glow {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: blur(40px); opacity: .4; pointer-events: none; z-index: -1;
-    }
-    @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* Cursor glow */
-    .cursor-glow {
-      position: fixed; width: 300px; height: 300px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(142,197,252,.1), transparent 70%);
-      pointer-events: none; z-index: 5; transform: translate(-50%,-50%);
-      transition: left .15s ease-out, top .15s ease-out;
+    .coming-soon .glow {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: blur(40px);
+      opacity: .4;
+      pointer-events: none;
+      z-index: -1;
     }
+
+    @keyframes shimmer {
+
+      0%,
+      100% {
+        background-position: 0% 50%
+      }
+
+      50% {
+        background-position: 100% 50%
+      }
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
 
     @media (max-width: 768px) {
-      .text-side { max-width: 100%; padding: 3rem 2rem; text-align: center; align-items: center; }
-      #neuron-canvas { opacity: 0.35; }
+      .text-side {
+        max-width: 100%;
+        padding: 3rem 2rem;
+        text-align: center;
+        align-items: center;
+      }
+
+      #neuron-canvas {
+        opacity: 0.35;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="gradient-bg"></div>
   <div class="orb orb-1"></div>
@@ -156,7 +296,6 @@
   <div class="orb orb-3"></div>
   <canvas id="neuron-canvas"></canvas>
   <div class="grain"></div>
-  <div class="cursor-glow" id="cursorGlow"></div>
 
   <div class="text-side">
     <h1 class="name">Isabella<br>Beckett</h1>
@@ -171,12 +310,6 @@
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    /* Cursor */
-    const cg = document.getElementById('cursorGlow');
-    document.addEventListener('mousemove', e => {
-      cg.style.left = e.clientX + 'px';
-      cg.style.top  = e.clientY + 'px';
-    });
 
     /* Three.js — right half canvas */
     const canvas = document.getElementById('neuron-canvas');
@@ -191,7 +324,7 @@
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.4;
 
-    const scene  = new THREE.Scene();
+    const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, W() / H(), 0.1, 5000);
     camera.position.set(0, 0, isMobile() ? 450 : 250);
 
@@ -207,13 +340,16 @@
     topLight.position.set(0, 1, 0);
     scene.add(topLight);
 
+    let neuronRadius = 0;
+
     function updateLayout() {
       camera.aspect = W() / H();
       camera.updateProjectionMatrix();
       renderer.setSize(W(), H());
       camera.position.z = isMobile() ? 450 : 250;
+
       if (neuronGroup) {
-        neuronGroup.position.x = isMobile() ? 0 : 80;
+        neuronGroup.position.x = isMobile() ? 0 : 25;
       }
     }
     window.addEventListener('resize', updateLayout);
@@ -251,9 +387,12 @@
       // Mesh is already centered and scaled (max extent = 200)
       neuronGroup = new THREE.Group();
       neuronGroup.add(root);
-      // Shift slightly left so it doesn't clip the right edge
-      if (!isMobile()) neuronGroup.position.x = -45;
       scene.add(neuronGroup);
+
+      neuronGroup.scale.setScalar(0.85);
+      neuronMaterial.opacity = 0;
+      neuronFadeStart = performance.now() + 1200; // fade in after text appears
+      updateLayout();
     }, undefined, (err) => {
       console.error('GLB load error:', err);
     });
@@ -261,12 +400,13 @@
     /* Mouse */
     let mouseX = 0, mouseY = 0;
     document.addEventListener('mousemove', e => {
-      mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
     });
 
     /* Animate */
     const clock = new THREE.Clock();
+    let neuronFadeStart = Infinity;
 
     function animate() {
       requestAnimationFrame(animate);
@@ -278,9 +418,18 @@
         neuronGroup.position.y = Math.sin(t * 0.3) * 10;
       }
 
+      // Neuron fade-in
+      if (neuronMaterial && neuronMaterial.opacity < 0.8) {
+        const now = performance.now();
+        if (now > neuronFadeStart) {
+          const elapsed = (now - neuronFadeStart) / 1500; // 1.5s fade duration
+          neuronMaterial.opacity = Math.min(0.8, elapsed * 0.8);
+        }
+      }
+
       // Camera parallax
-      camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
-      camera.position.y += (-mouseY * 30 - camera.position.y) * 0.02;
+      camera.position.x += (mouseX * 20 - camera.position.x) * 0.02;
+      camera.position.y += (-mouseY * 15 - camera.position.y) * 0.02;
       camera.lookAt(0, 0, 0);
 
       // Rotating light
@@ -297,4 +446,5 @@
     animate();
   </script>
 </body>
+
 </html>
