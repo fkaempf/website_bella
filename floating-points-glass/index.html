@@ -797,8 +797,8 @@
         var base = primes[i % primes.length] * 1000;
 
         function scheduleBlink() {
-          // Random jitter: 60-140% of base interval
-          var wait = base * (0.6 + Math.random() * 0.8);
+          // 2s minimum cooldown + random jitter on top of base interval
+          var wait = 2000 + base * (0.6 + Math.random() * 0.8);
           setTimeout(function() {
             var style = styles[Math.floor(Math.random() * styles.length)];
             dot.classList.add(style);
