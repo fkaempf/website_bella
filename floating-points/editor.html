@@ -420,21 +420,21 @@
     }
 
     @media (max-width: 768px) {
-      .text-side { max-width: 100%; padding: 2rem 2rem 1rem; text-align: center; align-items: center; }
+      .text-side { max-width: 100%; padding: 2rem 2rem 1rem; text-align: center; align-items: center; transform: translateY(-7.1vh); }
       .profile-image { width: 90px; height: 90px; }
       #neuron-canvas { opacity: 0.35; }
       /* Contact & CV above the text block */
-      .nav-dot:nth-child(4) { top: 4%; right: auto; bottom: auto; left: 18%; }
-      .nav-dot:nth-child(5) { top: 6%; right: 18%; bottom: auto; left: auto; transform: none; }
+      .nav-dot:nth-child(4) { top: 6.2%; right: auto; bottom: auto; left: 18%; }
+      .nav-dot:nth-child(5) { top: 14.6%; right: 18%; bottom: auto; left: auto; transform: none; }
       /* About, Publications, Research below */
-      .nav-dot:nth-child(1) { top: auto; right: auto; bottom: 15%; left: 18%; }
-      .nav-dot:nth-child(2) { top: auto; right: 18%; bottom: 9%; left: auto; }
-      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 3%; left: 32%; }
+      .nav-dot:nth-child(1) { top: 71%; right: auto; bottom: auto; left: 18%; }
+      .nav-dot:nth-child(2) { top: 78.7%; right: 18%; bottom: auto; left: auto; }
+      .nav-dot:nth-child(3) { top: 89%; right: auto; bottom: auto; left: 32%; }
       .popup { width: 95%; max-height: 80vh; padding: 2rem 1.5rem; border-radius: 22px; }
     }
     /* === DRAG EDITOR === */
     #drag-panel {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
       background: rgba(0,0,0,0.9); color: #0f0; font: 11px/1.6 monospace;
       padding: 8px 14px; pointer-events: auto;
     }
@@ -906,12 +906,12 @@
     var textSide = document.querySelector('.text-side');
     draggables.push({ el: textSide, name: '.text-side', mode: 'translate', locked: true });
 
-    // Nav dots — only Contact(4) and CV(5) are draggable
+    // Nav dots — only About(1), Publications(2), Research(3) are draggable
     var dots = document.querySelectorAll('.nav-dot');
     var dotNames = ['About(1)', 'Publications(2)', 'Research(3)', 'Contact(4)', 'CV(5)'];
     dots.forEach(function(dot, i) {
       dot.style.pointerEvents = 'auto';
-      if (i >= 3) {
+      if (i < 3) {
         dot.classList.add('draggable-active');
         draggables.push({ el: dot, name: dotNames[i], mode: 'position' });
       } else {
