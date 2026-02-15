@@ -161,15 +161,25 @@
       line-height: 1.1;
       margin-bottom: 1.5rem;
       color: #fff;
+      position: relative;
     }
 
-    .name.gradient-active {
+    .name-gradient-overlay {
+      position: absolute;
+      inset: 0;
       background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #f5d0fe, #c4b5fd);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: ng 6s ease infinite;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    .name-gradient-overlay.active {
+      opacity: 1;
     }
 
     .name .blur-letter {
@@ -282,7 +292,9 @@
   <canvas id="spark-canvas"></canvas>
 
   <div class="text-side">
-    <h1 class="name" id="blur-name" aria-label="Isabella Beckett"></h1>
+    <h1 class="name" id="blur-name" aria-label="Isabella Beckett">
+      <span class="name-gradient-overlay" id="name-gradient" aria-hidden="true">Isabella<br>Beckett</span>
+    </h1>
     <p class="tagline" id="decrypted-tagline" aria-label="Drosophila - Neuroscience - Connectomics"></p>
     <div class="coming-soon" id="coming-soon">
       <span class="glow" aria-hidden="true">Coming<br>Soon</span>
@@ -324,11 +336,10 @@
           }, i * DELAY_PER_LETTER);
         });
 
-        // After all letters revealed, switch to gradient text
+        // After all letters revealed, crossfade to gradient
         setTimeout(function() {
-          nameEl.innerHTML = 'Isabella<br>Beckett';
-          nameEl.classList.add('gradient-active');
-        }, totalLetters * DELAY_PER_LETTER + 600 + 300);
+          document.getElementById('name-gradient').classList.add('active');
+        }, totalLetters * DELAY_PER_LETTER + 600);
       }, BASE_DELAY);
     })();
 
