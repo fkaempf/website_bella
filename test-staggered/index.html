@@ -327,6 +327,47 @@
     .contact-item a { color: var(--text-secondary); text-decoration: none; font-weight: 300; font-size: 0.88rem; transition: color var(--transition); }
     .contact-item a:hover { color: var(--accent); }
 
+    /* Click hint for publication links */
+    .pub-title a { position: relative; }
+    .pub-item:first-child .pub-title a::after {
+      content: 'click';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.5rem;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(-3px);
+      animation: clickHint 10s ease-in-out 3s infinite;
+      pointer-events: none;
+    }
+    .pub-item:first-child .pub-title a::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      box-shadow: 0 0 4px rgba(142, 197, 252, 0.3);
+      animation: clickHintLine 10s ease-in-out 3s infinite;
+      pointer-events: none;
+    }
+    @keyframes clickHint {
+      0%, 90%, 100% { opacity: 0; transform: translateY(-3px); }
+      93%, 97% { opacity: 0.7; transform: translateY(0); }
+    }
+    @keyframes clickHintLine {
+      0%, 90%, 100% { width: 0; opacity: 0; }
+      93% { width: 40px; opacity: 1; }
+      97% { width: 40px; opacity: 1; }
+    }
+
     @media (max-width: 900px) {
       .sm-panel, .sm-prelayer { width: 100%; }
       .hero { padding: 3rem 2.5rem; }
@@ -423,7 +464,7 @@
         <p class="pub-year">2025</p>
         <p class="pub-title"><a href="https://doi.org/10.1101/2025.10.09.680999" target="_blank" rel="noopener">Sexual dimorphism in the complete connectome of the <em>Drosophila</em> male central nervous system</a></p>
         <p class="pub-authors">Berg S*, <span class="me">Beckett IR*</span>, Costa M*, Schlegel P*, ... Rubin GM, Jefferis GSXE</p>
-        <p class="pub-journal">bioRxiv <span class="pub-note">* Equal contribution</span></p>
+        <p class="pub-journal">bioRxiv</p>
       </div>
       <div class="pub-item">
         <p class="pub-year">2025</p>
