@@ -251,15 +251,16 @@
       position: fixed; inset: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
       background: transparent;
-      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+      visibility: hidden; pointer-events: none;
+      transition: visibility 0s linear 0.4s;
     }
-    .popup-overlay.active { opacity: 1; pointer-events: auto; }
+    .popup-overlay.active { visibility: visible; pointer-events: auto; transition: visibility 0s linear 0s; }
 
     .popup {
       width: 90%; max-width: 620px; max-height: 75vh; overflow-y: auto;
       border-radius: 28px; padding: 2.5rem; position: relative;
-      background-color: rgba(15, 12, 41, 0.75);
-      background: linear-gradient(135deg,
+      background-color: rgba(15, 12, 41, 0.92);
+      background-image: linear-gradient(135deg,
         rgba(255,255,255,0.06) 0%, rgba(142,197,252,0.04) 30%,
         rgba(224,195,252,0.04) 60%, rgba(255,255,255,0.06) 100%);
       backdrop-filter: blur(40px) saturate(1.6) brightness(1.1);
@@ -269,8 +270,8 @@
         0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 0 rgba(255,255,255,0.1) inset,
         0 -1px 0 0 rgba(255,255,255,0.02) inset,
         0 8px 40px rgba(0,0,0,0.35), 0 0 120px rgba(142,197,252,0.06), 0 0 60px rgba(224,195,252,0.04);
-      transform: scale(0.9) translateY(30px); opacity: 0;
-      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+      transform: scale(0.95) translateY(10px); opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.15s ease;
       will-change: transform, opacity;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
