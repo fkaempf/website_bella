@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
   <title>Isabella Beckett | Drosophila Connectomics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -446,7 +446,7 @@
 
   <!-- Text side -->
   <div class="text-side">
-    <img class="profile-image" src="../profile.jpeg" alt="Isabella Beckett" />
+    <img class="profile-image" src="../assets/profile.jpeg" alt="Isabella Beckett" />
     <h1 class="name" id="blur-name" aria-label="Isabella Beckett">
       <span class="name-gradient-overlay" id="name-gradient" aria-hidden="true">Isabella<br>Beckett</span>
     </h1>
@@ -813,7 +813,7 @@
     let neuronMaterial = null;
 
     const loader = new GLTFLoader();
-    loader.load('../neuron.glb', (gltf) => {
+    loader.load('../assets/neuron.glb', (gltf) => {
       const root = gltf.scene;
       const color = new THREE.Color().setHSL(0.55, 0.6, 0.55);
       const emissive = new THREE.Color().setHSL(0.55, 0.8, 0.25);
