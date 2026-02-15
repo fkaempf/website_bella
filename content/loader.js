@@ -367,8 +367,19 @@ function loadPublications() {
     });
 }
 
-// Auto-initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-  loadMeta('../content/');
-  loadContent('../content/');
-});
+// Auto-detect base path from this script's src attribute
+(function() {
+  var scripts = document.getElementsByTagName('script');
+  var basePath = '../content/';
+  for (var i = 0; i < scripts.length; i++) {
+    var src = scripts[i].getAttribute('src') || '';
+    if (src.indexOf('loader.js') >= 0) {
+      basePath = src.replace('loader.js', '');
+      break;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    loadMeta(basePath);
+    loadContent(basePath);
+  });
+})();
