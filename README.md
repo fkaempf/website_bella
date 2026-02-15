@@ -1,1 +1,1 @@
-# website_bella
+Personal academic website for Isabella Beckett - isabellabeckett.com
