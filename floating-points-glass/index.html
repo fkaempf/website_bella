@@ -415,14 +415,16 @@
     }
 
     @media (max-width: 768px) {
-      .text-side { max-width: 100%; padding: 3rem 2rem; text-align: center; align-items: center; }
+      .text-side { max-width: 100%; padding: 2rem 2rem 1rem; text-align: center; align-items: center; }
       .profile-image { width: 90px; height: 90px; }
       #neuron-canvas { opacity: 0.35; }
-      .nav-dot:nth-child(1) { top: auto; right: auto; bottom: 28%; left: 15%; }
-      .nav-dot:nth-child(2) { top: auto; right: 15%; bottom: 22%; }
-      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 14%; left: 20%; }
-      .nav-dot:nth-child(4) { top: auto; right: 20%; bottom: 8%; }
-      .nav-dot:nth-child(5) { top: auto; right: auto; bottom: 2%; left: 50%; transform: translateX(-50%); }
+      /* Contact & CV above the text block */
+      .nav-dot:nth-child(4) { top: 6%; right: auto; bottom: auto; left: 25%; }
+      .nav-dot:nth-child(5) { top: 8%; right: 25%; bottom: auto; left: auto; transform: none; }
+      /* About, Publications, Research below — shifted up, away from edges */
+      .nav-dot:nth-child(1) { top: auto; right: auto; bottom: 26%; left: 25%; }
+      .nav-dot:nth-child(2) { top: auto; right: 25%; bottom: 18%; left: auto; }
+      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 10%; left: 30%; }
       .popup { width: 95%; max-height: 80vh; padding: 2rem 1.5rem; border-radius: 22px; }
     }
   </style>
