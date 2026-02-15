@@ -268,30 +268,41 @@ function loadPublications() {
         };
       });
 
-      // Normalize title for fuzzy matching (lowercase, strip punctuation/whitespace)
-      function normalize(t) {
-        return t.toLowerCase().replace(/[^a-z0-9]/g, '');
+      // Extract significant words (4+ chars) from a title for fuzzy matching
+      function titleWords(t) {
+        return t.toLowerCase().replace(/[^a-z ]/g, '').split(/\s+/).filter(function(w) {
+          return w.length >= 4;
+        });
+      }
+
+      // Check if two titles are similar (>50% word overlap)
+      function titlesSimilar(wordsA, wordsB) {
+        if (wordsA.length === 0 || wordsB.length === 0) return false;
+        var setB = {};
+        wordsB.forEach(function(w) { setB[w] = true; });
+        var overlap = 0;
+        wordsA.forEach(function(w) { if (setB[w]) overlap++; });
+        var smaller = Math.min(wordsA.length, wordsB.length);
+        return overlap / smaller > 0.5;
       }
 
       // Deduplicate: if a bioRxiv preprint has a published version, suppress the preprint
       var publications = [];
-      var suppressedNorms = {};
 
-      // First pass: find published (non-bioRxiv) papers and record their normalized titles
-      var publishedNorms = {};
+      // First pass: collect word sets for published (non-bioRxiv) papers
+      var publishedWords = [];
       allPubs.forEach(function(pub) {
         if (!pub.isBiorxiv) {
-          publishedNorms[normalize(pub.title)] = true;
+          publishedWords.push(titleWords(pub.title));
         }
       });
 
-      // Second pass: skip bioRxiv papers whose title matches a published paper
+      // Second pass: skip bioRxiv papers whose title overlaps with a published paper
       allPubs.forEach(function(pub) {
         if (pub.isBiorxiv) {
-          var norm = normalize(pub.title);
-          // Check if any published title contains this one or vice versa
-          var dominated = Object.keys(publishedNorms).some(function(pn) {
-            return pn.indexOf(norm) >= 0 || norm.indexOf(pn) >= 0;
+          var words = titleWords(pub.title);
+          var dominated = publishedWords.some(function(pw) {
+            return titlesSimilar(words, pw);
           });
           if (dominated) return; // skip this preprint
         }
