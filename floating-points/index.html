@@ -436,45 +436,35 @@
     .contact-item a { color: var(--text-secondary); text-decoration: none; font-weight: 300; font-size: 0.88rem; transition: color var(--transition); }
     .contact-item a:hover { color: var(--accent); }
 
-    /* Click hint for publication links */
+    /* Click hint for publication title links (not obviously clickable) */
     .pub-title a { position: relative; }
     .pub-item:first-child .pub-title a::after {
-      content: 'click';
-      position: absolute;
-      bottom: -12px;
-      left: 0;
+      content: 'click me';
+      position: absolute; bottom: -12px; left: 0;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 0.5rem;
-      font-weight: 500;
-      font-style: normal;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      opacity: 0;
-      transform: translateY(-3px);
-      animation: clickHint 10s ease-in-out 3s infinite;
+      font-size: 0.45rem; font-weight: 500; font-style: normal;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); opacity: 0; transform: translateY(-3px);
+      animation: clickHint 13s ease-in-out 7s infinite;
       pointer-events: none;
     }
     .pub-item:first-child .pub-title a::before {
       content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
+      position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px;
       background: linear-gradient(90deg, var(--accent), transparent);
       box-shadow: 0 0 4px rgba(142, 197, 252, 0.3);
-      animation: clickHintLine 10s ease-in-out 3s infinite;
+      animation: clickHintLine 13s ease-in-out 7s infinite;
       pointer-events: none;
     }
     @keyframes clickHint {
-      0%, 90%, 100% { opacity: 0; transform: translateY(-3px); }
-      93%, 97% { opacity: 0.7; transform: translateY(0); }
+      0%, 85%, 100% { opacity: 0; transform: translateY(-3px); }
+      88%, 95% { opacity: 0.7; transform: translateY(0); }
     }
     @keyframes clickHintLine {
-      0%, 90%, 100% { width: 0; opacity: 0; }
-      93% { width: 40px; opacity: 1; }
-      97% { width: 40px; opacity: 1; }
+      0%, 85%, 100% { width: 0; opacity: 0; }
+      88% { width: 40px; opacity: 1; }
+      95% { width: 40px; opacity: 1; }
     }
 
     @media (max-width: 768px) {
