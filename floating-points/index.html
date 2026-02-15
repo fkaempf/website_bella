@@ -411,16 +411,17 @@
     }
 
     @media (max-width: 768px) {
-      .text-side { max-width: 100%; padding: 1.2rem 2rem 1rem; text-align: center; align-items: center; min-height: auto; }
+      .text-side { max-width: 100%; padding: 2rem 2rem 1rem; text-align: center; align-items: center; min-height: auto; }
       .profile-image { width: 90px; height: 90px; margin-bottom: 0.8rem; }
       .name { margin-bottom: 0.3rem; }
       .social-icons { margin-bottom: 1rem; }
       #neuron-canvas { opacity: 0.35; }
-      .nav-dot:nth-child(1) { top: auto; right: auto; bottom: 28%; left: 15%; }
-      .nav-dot:nth-child(2) { top: auto; right: 15%; bottom: 22%; }
-      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 14%; left: 20%; }
-      .nav-dot:nth-child(4) { top: auto; right: 20%; bottom: 8%; }
-      .nav-dot:nth-child(5) { top: auto; right: auto; bottom: 2%; left: 50%; transform: translateX(-50%); }
+      /* Dots distributed above AND below the text block */
+      .nav-dot:nth-child(1) { top: 5%; right: auto; bottom: auto; left: 20%; }
+      .nav-dot:nth-child(2) { top: 10%; right: 15%; bottom: auto; left: auto; }
+      .nav-dot:nth-child(3) { top: auto; right: auto; bottom: 22%; left: 18%; }
+      .nav-dot:nth-child(4) { top: auto; right: 16%; bottom: 14%; left: auto; }
+      .nav-dot:nth-child(5) { top: auto; right: auto; bottom: 5%; left: 50%; transform: translateX(-50%); }
       .popup { width: 95%; max-height: 80vh; padding: 2rem 1.5rem; border-radius: 22px; }
     }
   </style>
