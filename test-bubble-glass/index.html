@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!-- v1 - BubbleMenu navigation variant -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isabella Beckett | Bubble Menu (Glass)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0f0c29;
+      --text-primary: #e8e8e8;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+      --accent: #8ec5fc;
+      --accent-secondary: #e0c3fc;
+      --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      overflow: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .gradient-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #0f0c29);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.25; pointer-events: none; z-index: 0; will-change: transform; }
+    .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, #e040fb, #7c4dff); top: -10%; left: -10%; animation: f1 18s ease-in-out infinite; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #00e5ff, #1de9b6); bottom: -15%; right: -10%; animation: f2 22s ease-in-out infinite; }
+    .orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, #ff6090, #ff80ab); top: 40%; left: 50%; animation: f3 16s ease-in-out infinite; }
+    @keyframes f1 { 0%, 100% { transform: translate(0,0) scale(1) } 33% { transform: translate(120px,80px) scale(1.1) } 66% { transform: translate(-60px,140px) scale(.95) } }
+    @keyframes f2 { 0%, 100% { transform: translate(0,0) scale(1) } 33% { transform: translate(-100px,-60px) scale(1.15) } 66% { transform: translate(80px,-120px) scale(.9) } }
+    @keyframes f3 { 0%, 100% { transform: translate(0,0) scale(1) } 50% { transform: translate(-140px,-100px) scale(1.08) } }
+
+    .grain {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04; contain: strict;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+    }
+
+    /* Bubble nav bar */
+    .bubble-nav {
+      position: fixed; top: 2rem; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .bubble {
+      pointer-events: auto;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-bubble {
+      height: 52px;
+      padding: 0 1.2rem;
+      gap: 0.6rem;
+    }
+
+    .logo-bubble img {
+      width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+    }
+
+    .logo-bubble span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .toggle-bubble {
+      width: 52px; height: 52px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu-line {
+      width: 22px; height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    .toggle-bubble.open .menu-line:first-child { transform: translateY(3.5px) rotate(45deg); }
+    .toggle-bubble.open .menu-line:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+    /* Fullscreen pill overlay */
+    .pill-overlay {
+      position: fixed; inset: 0; z-index: 45;
+      display: none;
+      align-items: center; justify-content: center;
+      background: rgba(5, 3, 15, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .pill-list {
+      list-style: none;
+      display: flex; flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 900px;
+      width: 90%;
+      justify-content: center;
+    }
+
+    .pill-col {
+      flex: 0 0 calc(50% - 0.5rem);
+    }
+
+    .pill-link {
+      display: flex;
+      align-items: center; justify-content: center;
+      width: 100%;
+      min-height: 140px;
+      padding: 2rem 1rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 2.5rem);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+      transform: scale(0);
+    }
+
+    .pill-link:hover {
+      background: rgba(142, 197, 252, 0.12);
+      border-color: rgba(142, 197, 252, 0.25);
+      transform: scale(1.04) !important;
+    }
+
+    .pill-link:active {
+      transform: scale(0.96) !important;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: center;
+      min-height: 100vh;
+      padding: 4rem 6rem;
+    }
+
+    .profile-image {
+      width: 120px; height: 120px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      object-fit: cover; margin-bottom: 1.5rem;
+      opacity: 0; transform: scale(0.9);
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: clamp(2.2rem, 4vw, 3.5rem);
+      letter-spacing: 0.03em; text-transform: uppercase;
+      line-height: 1.1; margin-bottom: 0.6rem; color: #fff;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+    }
+
+    .hero-tagline {
+      font-weight: 300; font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); margin-bottom: 2rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.6s forwards;
+    }
+
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .social-icons {
+      display: flex; gap: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0; transform: translateY(10px);
+      animation: fadeInUp 0.8s ease 0.8s forwards;
+    }
+    .social-icons a {
+      color: rgba(255,255,255,0.3);
+      transition: color 0.3s ease, transform 0.3s ease;
+      display: flex; align-items: center;
+    }
+    .social-icons a:hover {
+      color: rgba(142, 197, 252, 0.9);
+      transform: translateY(-2px);
+    }
+    .social-icons svg { width: 18px; height: 18px; }
+
+    /* Popup styles — liquid glass */
+    /* === LIQUID GLASS POPUP === */
+    .popup-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+      visibility: hidden; pointer-events: none;
+      transition: visibility 0s linear 0.4s;
+    }
+    .popup-overlay.active { visibility: visible; pointer-events: auto; transition: visibility 0s linear 0s; }
+
+    .popup {
+      width: 90%; max-width: 620px;
+      border-radius: 28px; position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 80px rgba(142,197,252,0.08);
+      transform: scale(0.95) translateY(10px); opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.15s ease;
+      will-change: transform, opacity;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .popup-overlay.active .popup { transform: scale(1) translateY(0); opacity: 1; }
+
+    .glass-warp {
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      filter: url(#glass-filter);
+      backdrop-filter: blur(24px) saturate(150%);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      z-index: 0;
+    }
+
+    .glass-border {
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      padding: 1.5px;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.5) inset,
+                  0 1px 3px rgba(255,255,255,0.25) inset,
+                  0 1px 4px rgba(0,0,0,0.35);
+      z-index: 3;
+    }
+    .glass-border--screen {
+      mix-blend-mode: screen;
+      opacity: 0.3;
+      background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 33%, rgba(255,255,255,0.45) 66%, rgba(255,255,255,0) 100%);
+    }
+    .glass-border--overlay {
+      mix-blend-mode: overlay;
+      background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 33%, rgba(255,255,255,0.65) 66%, rgba(255,255,255,0) 100%);
+    }
+
+    .popup-scroll {
+      position: relative;
+      z-index: 1;
+      max-height: 75vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+    }
+    .popup-scroll::-webkit-scrollbar { width: 4px; }
+    .popup-scroll::-webkit-scrollbar-track { background: transparent; }
+    .popup-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+
+    .popup-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(255,255,255,0.5); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: all 0.3s ease;
+    }
+    .popup-close:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.2); box-shadow: 0 0 12px rgba(142,197,252,0.15); }
+
+    .popup-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .popup-title { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .popup p { color: var(--text-secondary); font-weight: 300; font-size: 0.9rem; line-height: 1.75; margin-bottom: 1rem; }
+    .popup p:last-child { margin-bottom: 0; }
+
+    .pub-item { padding: 1.1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-year { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.35rem; }
+    .pub-title { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.35rem; }
+    .pub-title a { color: var(--text-primary); text-decoration: none; transition: color var(--transition); }
+    .pub-title a:hover { color: var(--accent); }
+    .pub-authors { font-size: 0.78rem; font-weight: 300; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .pub-authors .me { color: var(--text-secondary); font-weight: 400; }
+    .pub-journal { font-size: 0.78rem; font-style: italic; color: var(--text-muted); }
+    .pub-note { font-style: normal; font-size: 0.7rem; color: var(--accent-secondary); }
+
+    .research-block { padding: 1.2rem; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.8rem; transition: background 0.3s ease; }
+    .research-block:hover { background: rgba(255,255,255,0.04); }
+    .research-block h3 { font-family: 'IBM Plex Serif', serif; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .research-block p { font-size: 0.85rem; margin-bottom: 0; }
+    .research-tag { display: inline-block; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-secondary); margin-bottom: 0.4rem; }
+
+    .contact-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-icon { color: var(--text-muted); flex-shrink: 0; }
+    .contact-item a { color: var(--text-secondary); text-decoration: none; font-weight: 300; font-size: 0.88rem; transition: color var(--transition); }
+    .contact-item a:hover { color: var(--accent); }
+
+    /* Click hint for publication links */
+    .pub-title a { position: relative; }
+    .pub-item:first-child .pub-title a::after {
+      content: 'click';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.5rem;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(-3px);
+      animation: clickHint 10s ease-in-out 3s infinite;
+      pointer-events: none;
+    }
+    .pub-item:first-child .pub-title a::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      box-shadow: 0 0 4px rgba(142, 197, 252, 0.3);
+      animation: clickHintLine 10s ease-in-out 3s infinite;
+      pointer-events: none;
+    }
+    @keyframes clickHint {
+      0%, 90%, 100% { opacity: 0; transform: translateY(-3px); }
+      93%, 97% { opacity: 0.7; transform: translateY(0); }
+    }
+    @keyframes clickHintLine {
+      0%, 90%, 100% { width: 0; opacity: 0; }
+      93% { width: 40px; opacity: 1; }
+      97% { width: 40px; opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 3rem 2.5rem; }
+      .profile-image { width: 90px; height: 90px; }
+      .pill-col { flex: 0 0 100%; }
+      .pill-link { min-height: 80px; padding: 1.5rem 1rem; }
+      .popup { width: 95%; max-height: 80vh; padding: 2rem 1.5rem; border-radius: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gradient-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="grain"></div>
+
+  <!-- Bubble Nav -->
+  <nav class="bubble-nav">
+    <div class="bubble logo-bubble">
+      <img src="../profile.jpeg" alt="Isabella Beckett" />
+      <span>IB</span>
+    </div>
+    <button class="bubble toggle-bubble" id="menu-toggle" aria-label="Toggle menu">
+      <span class="menu-line"></span>
+      <span class="menu-line"></span>
+    </button>
+  </nav>
+
+  <!-- Pill overlay -->
+  <div class="pill-overlay" id="pill-overlay">
+    <ul class="pill-list">
+      <li class="pill-col"><button class="pill-link" data-popup="about">About</button></li>
+      <li class="pill-col"><button class="pill-link" data-popup="publications">Publications</button></li>
+      <li class="pill-col"><button class="pill-link" data-popup="research">Research</button></li>
+      <li class="pill-col"><button class="pill-link" data-popup="contact">Contact</button></li>
+      <li class="pill-col"><button class="pill-link" data-popup="cv">CV</button></li>
+    </ul>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <img class="profile-image" src="../profile.jpeg" alt="Isabella Beckett" />
+    <h1 class="hero-name">Isabella<br>Beckett</h1>
+    <p class="hero-tagline">Drosophila &middot; Neuroscience &middot; Connectomics</p>
+    <div class="social-icons">
+      <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+      </a>
+      <a href="https://orcid.org/0009-0001-3527-6782" target="_blank" rel="noopener" aria-label="ORCID">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378a.815.815 0 1 1 0 1.63.815.815 0 0 1 0-1.63zM6.6 7.25h1.538v9.5H6.6v-9.5zm3.846 0h4.154c3.308 0 5 2.223 5 4.75s-1.692 4.75-5 4.75H10.446v-9.5zm1.538 1.385v6.731h2.616c2.385 0 3.462-1.569 3.462-3.365 0-1.797-1.077-3.366-3.462-3.366h-2.616z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/isabella-beckett-53b385149/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="mailto:placeholder@mrc-lmb.cam.ac.uk" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Popups (same content as test/) -->
+      <!-- Liquid Glass SVG Filter -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+      <defs>
+        <filter id="glass-filter" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+          <feImage width="100%" height="100%" result="DISPLACEMENT_MAP" href="data:image/jpeg;base64,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cUAUAkEkziomgGgkoxZGgxZFQFQlYnQHRdPfj/10KCSCKESCNiVkViPSLpD0h6I0Q0I0A2IoBWBIJIBKBIJoJIJ2R2J0JWBUJ0JUB0XTv479dFZDYiglYigkhEgjZFQjRFQjRFQjQigFYigHYigmgEgmglYlYnQlQlYlQHQlQnQ9P/kf1yVkNiNCNkNiVENiNiViNEViNkVCVgKCViViViSCViSCVgdCViVCViVCdgVCVCdD1D+U/XBWQ2I0I2Q2JUQ2I0JWQ0I2JUQ2JUI2JUI2J0JWJWJWA2R0BWJ0I2JUJ2BUJUJ0P//EABkQAQEBAQEBAAAAAAAAAAAAAAECABEDEP/aAAgBAQABAgB1atWrVq1atWrVq1atWrVq1atWrVq1atWrVq+OrVq1atWrVq1atWrVq1atWrVq1atWrVq1atXxVppppppdWrVq1atWrVq1NNNNNNNNNNNPVWmmmmms6tWrVq1atWpppppppppppppp6q0000uc51atWrVq1ammmmmmmmmmmmmt1Vpppc5znVq1atWrVqaaaaaaaaaaaaaeqtNLnOc51atWrVq1ammmmmmmmmmmmmnqrS5znOc6tWrVq16222mmmmmmlVppp6tKuc5znOrVq1a9TbbbbTTTTTSq000qtLnOc5zq1atWrW0222200000qqqtKqrnOc5zq1atTbbbbbbbbTTTSqqqqqq5znOc6tTTTbbbbbbbbTTTSqqqqrlVznOctNNNtttttttttNNNNKqqqrqznKqrTTTTbbbbbbbbbTTTSqqqqrqznOc5aaaabbbbbbbbbaaaaVVVVVdWc5znVq1NNttttttttttNNKqqqqudWc5znVq16tbbbbbbbbbbTTSqqqq5XVnOc6tWrVrb1tttttttttNNKqqqqrWrK5VWmmm2230bbbbbbaaaXOc5zlVa1KuVVppptttt9G22222mmlzlVznK6tWVVWmmmm2222222222mlznOc5znLWppVVWmmm22222229bTWrOc5znOcq1qaaVpWmm222222229erVqznOc5znKtatStK0rTbTTbbbberXr1as5znOc5aVpppppWlabaabbbb1ta9WrVnOc5znU0rTTTTTTTTTbTTbbbTWvVq1as5znOdTTStNNNNNNNNNtNNtttN6tWvVq1ZznOrU00rTTTTTTTTTTTTTbTWvVq1atWrOc6tTTTStNNNNNNNNNNtNNtNa9WrVq1Z1Z1NNNNNK1q1NNNNNNNNNNNtNatWrVq1atWrU00000rWrVq1atWrVq1alaaa1atWrVq1NNNammmmla1atWrVq1aterVq16tWrVnVqa1NK1qaaaVX/xAAWEAADAAAAAAAAAAAAAAAAAAAhgJD/2gAIAQEAAz8AaExf/8QAGhEBAQEBAQEBAAAAAAAAAAAAAQISEQADEP/aAAgBAgEBAgDx48ePHjx48ePHjx48ePHjx48ePHjx48ePHj86IiIiIiInjx48ePHjx48IiIiIj0oooooooooRERER73ve60UUUUUUVrWiiiiiihERERER73ve97ooooorRWiiiiihKERERER73ve973RRRRWtFFFFFFCIiIiIiPe973ve60UUVrRRRRRRQiIlCIiI973ve973pRRWiiiiiiiiiiiiiiihEe973ve973RRWtFFFFFFFFFFFFFFFFFFa13ve973WitaKKKKKKKKKKKKKKKKKK1rWtd1rutFa1oooooooooooosssooorWta1rWta1rRRRRRRRRRRZZZZZZZZZWta1rWta1rRRRRRRRRZZZZZZZZZZZZe9a1rWta1rWitaKLLLLLLLLLLLLLLLLL3rWta1rWtFbLLLLLLLLLLLLLLLLLLLL3vWta1rWita1ssssssss+hZZZZZZZZe961rWta0Vre97LLLLLLLLLLLPoWWWWWXrWta1oorWta3ssss+hZZZZ9Cyyyyyyyyiita1orWta1ve9llllllllllllllllFFa0VorWta1ve9llllllllllllllllllFFFaK1rWta1rWiyyyyyyyyyyyyiiiiiiitFFa1rWta1oosoosssssoooosoooorRRRWta1rWta0UUUUUWUUUUUUUUUUUVoooorWta1rWtaKKKKKKmiiiiiiiiiiiiiiitd73ve61oSiiipoqaKKKKKKKKKK0UUUVrve973vREREZoSihEooooorRRRRWtd73ve9EREREREoSiiiiitFllllla73ve9ERERERESiiiiiitH0PoWWWWVrXe96IiIiMoiJRRRRRRWjwlFFllllFFd6IiIiIlCUUUUUUUUUePHjx48ePCIiIiIiIiUUUUUUUUUUUePHjx48ePHjx48ePHjx48IiUUUUUUJRRRX//xAAWEQADAAAAAAAAAAAAAAAAAAABYJD/2gAIAQIBAz8AtEV7/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAECEP/aAAgBAwEBAgCtNNNNNNNNNNNNNNNNNNNNNNNNNNNNNcrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTXKrTTTTTTTU000000000000000000001FVpppppqampqaaaaaaaaaaaaaaaaaaaa5Vaaaaampqampqammmmmmmmmmmlaaaaaaiq0001NTU1NTU1NTTTTTTTTTTSqqtNNNcqtNNSyzU1LNTU1NTTTTTTTTTSqqq001ytNLLLLNTU1NTU1NTbbbTTTTTSqqq001ytNLLLLLNTU1NTU3NttttNNNNNKqq001KrSyyyyyzU1NTU3Nzc02220000qqqqrSqqyyyyyzU1NTU3Nzc3NttttNNNKqqqqqqssssss1NTU3Nzc3NzbbbbTTTSqqqqqqrLLLLLNTU1Nzc3Nzc22220000qqqqqqqqssss1NTU3Nzc3NzbbbbbTTSqqqqqqqqqqzU1NTc3Nzc3Nzbc22000qqqqqqqqqqqtTU3Nzc3Nzc3NtzbTTSqqqqrKqqqqqtNNzc23Nzc3Nzc3NTU1KqqqrKqqqqqtNNNNttzc3Nzc3NzU1NLLLLLKqqqqqqqq0022223Nzc3NzU1NSyyyyyyqqqqqqqrTTbbbbc3Nzc3NTU1LLLLLLKsqqqqqqrTTTTbbbc3Nzc1NTUsssssssqqqqqqrTTTTTbbbTc3NTU1NTUsssssqqqqqqqq0000222023NTU1NTUsssssqqqqqqqq000000003NTU1NTU1LLLLLNKrTSqqqqtNNNNNNtNNTU1NSzUssss00qq0qqqqrTTTTTTTTTU1NTUs1LLLNNNKrTTTSqqq00000000001NTU1LNTU0000qtNNNKqqqtNNNNNNNNTU1NTUs1NNNNNKss1NNNK00qtK0000001NNTU0s000000qq000001NKrStNNNNK1NNNNStNNNNNKqtNNNNNNNK0000000rU0000rTTTTTSq00000rTTTTTTTTTTTTTTTTStNNNNKr/xAAUEQEAAAAAAAAAAAAAAAAAAACg/9oACAEDAQM/AAAf/9k=" preserveAspectRatio="xMidYMid slice"/>
+          <feDisplacementMap in="SourceGraphic" in2="DISPLACEMENT_MAP" scale="-70" xChannelSelector="R" yChannelSelector="B" result="RED_DISPLACED"/>
+          <feColorMatrix in="RED_DISPLACED" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="RED_CHANNEL"/>
+          <feDisplacementMap in="SourceGraphic" in2="DISPLACEMENT_MAP" scale="-66.5" xChannelSelector="R" yChannelSelector="B" result="GREEN_DISPLACED"/>
+          <feColorMatrix in="GREEN_DISPLACED" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="GREEN_CHANNEL"/>
+          <feDisplacementMap in="SourceGraphic" in2="DISPLACEMENT_MAP" scale="-63" xChannelSelector="R" yChannelSelector="B" result="BLUE_DISPLACED"/>
+          <feColorMatrix in="BLUE_DISPLACED" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="BLUE_CHANNEL"/>
+          <feBlend in="GREEN_CHANNEL" in2="BLUE_CHANNEL" mode="screen" result="GB_COMBINED"/>
+          <feBlend in="RED_CHANNEL" in2="GB_COMBINED" mode="screen" result="RGB_COMBINED"/>
+          <feGaussianBlur in="RGB_COMBINED" stdDeviation="0.3" result="ABERRATED_BLURRED"/>
+          <feColorMatrix in="DISPLACEMENT_MAP" type="matrix" values="0.3 0.3 0.3 0 0  0.3 0.3 0.3 0 0  0.3 0.3 0.3 0 0  0 0 0 1 0" result="EDGE_INTENSITY"/>
+          <feComponentTransfer in="EDGE_INTENSITY" result="EDGE_MASK">
+            <feFuncA type="discrete" tableValues="0 0.1 1"/>
+          </feComponentTransfer>
+          <feOffset in="SourceGraphic" dx="0" dy="0" result="CENTER_ORIGINAL"/>
+          <feComposite in="ABERRATED_BLURRED" in2="EDGE_MASK" operator="in" result="EDGE_ABERRATION"/>
+          <feComponentTransfer in="EDGE_MASK" result="INVERTED_MASK">
+            <feFuncA type="table" tableValues="1 0"/>
+          </feComponentTransfer>
+          <feComposite in="CENTER_ORIGINAL" in2="INVERTED_MASK" operator="in" result="CENTER_CLEAN"/>
+          <feComposite in="EDGE_ABERRATION" in2="CENTER_CLEAN" operator="over"/>
+        </filter>
+      </defs>
+    </svg>
+
+<div class="popup-overlay" id="popup-about">
+    <div class="popup">
+      <span class="glass-warp"></span>
+        <span class="glass-border glass-border--screen"></span>
+        <span class="glass-border glass-border--overlay"></span>
+        <div class="popup-scroll">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">About</p>
+      <h2 class="popup-title">About</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-overlay" id="popup-publications">
+    <div class="popup">
+      <span class="glass-warp"></span>
+        <span class="glass-border glass-border--screen"></span>
+        <span class="glass-border glass-border--overlay"></span>
+        <div class="popup-scroll">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Publications</p>
+      <h2 class="popup-title">Publications</h2>
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title"><a href="https://doi.org/10.1101/2025.10.09.680999" target="_blank" rel="noopener">Sexual dimorphism in the complete connectome of the <em>Drosophila</em> male central nervous system</a></p>
+        <p class="pub-authors">Berg S*, <span class="me">Beckett IR*</span>, Costa M*, Schlegel P*, ... Rubin GM, Jefferis GSXE</p>
+        <p class="pub-journal">bioRxiv</p>
+      </div>
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title"><a href="https://doi.org/10.1101/2025.08.25.671814" target="_blank" rel="noopener">From Sensory Detection to Motor Action: The Comprehensive <em>Drosophila</em> Taste-Feeding Connectome</a></p>
+        <p class="pub-authors">Tastekin I, de Haan Vicente I, Beresford RJ, Morris BJ, <span class="me">Beckett I</span>, Schlegel P, Costa M, Jefferis GSXE, Ribeiro C</p>
+        <p class="pub-journal">bioRxiv</p>
+      </div>
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title"><a href="https://doi.org/10.1101/2025.07.16.664682" target="_blank" rel="noopener">A Developmental Atlas of the <em>Drosophila</em> Nerve Cord Uncovers a Global Temporal Code for Neuronal Identity</a></p>
+        <p class="pub-authors">Cachero S, Mitletton M, <span class="me">Beckett IR</span>, Marin EC, Serratosa Capdevila L, Gkantia M, Lacin H, Jefferis GSXE, Don&agrave; E</p>
+        <p class="pub-journal">bioRxiv</p>
+      </div>
+      <div class="pub-item">
+        <p class="pub-year">2025</p>
+        <p class="pub-title"><a href="https://doi.org/10.1038/s41586-025-08925-z" target="_blank" rel="noopener">Comparative connectomics of <em>Drosophila</em> descending and ascending neurons</a></p>
+        <p class="pub-authors">St&uuml;rner T, Brooks P, Serratosa Capdevila L, Morris BJ, Javier A, Fang S, Gkantia M, Cachero S, <span class="me">Beckett IR</span>, Marin EC, Schlegel P, ... Costa M, Jefferis GSXE, Eichler K</p>
+        <p class="pub-journal">Nature 643, 158&ndash;172</p>
+      </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-overlay" id="popup-research">
+    <div class="popup">
+      <span class="glass-warp"></span>
+        <span class="glass-border glass-border--screen"></span>
+        <span class="glass-border glass-border--overlay"></span>
+        <div class="popup-scroll">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Research</p>
+      <h2 class="popup-title">Research</h2>
+      <div class="research-block"><span class="research-tag">Current</span><h3>Lorem Ipsum Dolor Sit Amet</h3><p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p></div>
+      <div class="research-block"><span class="research-tag">Methods</span><h3>Sed Ut Perspiciatis Unde Omnis</h3><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p></div>
+      <div class="research-block"><span class="research-tag">Collaboration</span><h3>At Vero Eos Et Accusamus</h3><p>Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate.</p></div>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-overlay" id="popup-contact">
+    <div class="popup">
+      <span class="glass-warp"></span>
+        <span class="glass-border glass-border--screen"></span>
+        <span class="glass-border glass-border--overlay"></span>
+        <div class="popup-scroll">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Contact</p>
+      <h2 class="popup-title">Contact</h2>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+        <a href="https://scholar.google.com/citations?user=oLSyhNIAAAAJ" target="_blank" rel="noopener">Google Scholar Profile</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <a href="https://www2.mrc-lmb.cam.ac.uk/research/neurobiology/" target="_blank" rel="noopener">MRC LMB Neurobiology</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="contact-icon"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <a href="mailto:placeholder@mrc-lmb.cam.ac.uk">placeholder@mrc-lmb.cam.ac.uk</a>
+      </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="popup-overlay" id="popup-cv">
+    <div class="popup">
+      <span class="glass-warp"></span>
+        <span class="glass-border glass-border--screen"></span>
+        <span class="glass-border glass-border--overlay"></span>
+        <div class="popup-scroll">
+      <button class="popup-close">&times;</button>
+      <p class="popup-label">Curriculum Vitae</p>
+      <h2 class="popup-title">CV</h2>
+      <div class="research-block">
+        <span class="research-tag">Education</span>
+        <h3>PhD Neuroscience</h3>
+        <p>University of Cambridge, MRC Laboratory of Molecular Biology. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+      <div class="research-block">
+        <span class="research-tag">Education</span>
+        <h3>MSci Natural Sciences</h3>
+        <p>University of Cambridge. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      </div>
+      <div class="research-block">
+        <span class="research-tag">Experience</span>
+        <h3>Research Assistant</h3>
+        <p>MRC Laboratory of Molecular Biology, Neurobiology Division. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+      </div>
+      <div class="research-block">
+        <span class="research-tag">Skills</span>
+        <h3>Computational &amp; Experimental</h3>
+        <p>Connectomics, neural circuit analysis, Python, R, image registration, electron microscopy data analysis.</p>
+      </div>
+      <div class="research-block">
+        <span class="research-tag">Awards</span>
+        <h3>Lorem Ipsum Award</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      </div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+    var toggle = document.getElementById('menu-toggle');
+    var overlay = document.getElementById('pill-overlay');
+    var pills = document.querySelectorAll('.pill-link');
+    var isOpen = false;
+
+    toggle.addEventListener('click', function() {
+      isOpen = !isOpen;
+      toggle.classList.toggle('open', isOpen);
+
+      if (isOpen) {
+        overlay.style.display = 'flex';
+        gsap.killTweensOf(pills);
+        gsap.set(pills, { scale: 0 });
+        pills.forEach(function(pill, i) {
+          var delay = i * 0.12 + (Math.random() * 0.06 - 0.03);
+          gsap.to(pill, { scale: 1, duration: 0.5, ease: 'back.out(1.5)', delay: delay });
+        });
+      } else {
+        gsap.killTweensOf(pills);
+        gsap.to(pills, {
+          scale: 0, duration: 0.2, ease: 'power3.in',
+          onComplete: function() { overlay.style.display = 'none'; }
+        });
+      }
+    });
+
+    // Pill click → open popup
+    pills.forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        var popupId = 'popup-' + pill.dataset.popup;
+        document.getElementById(popupId).classList.add('active');
+        // close menu
+        isOpen = false;
+        toggle.classList.remove('open');
+        gsap.to(pills, {
+          scale: 0, duration: 0.2, ease: 'power3.in',
+          onComplete: function() { overlay.style.display = 'none'; }
+        });
+      });
+    });
+
+    // Close popups
+    document.querySelectorAll('.popup-overlay').forEach(function(ov) {
+      ov.addEventListener('click', function(e) { if (e.target === ov) ov.classList.remove('active'); });
+    });
+    document.querySelectorAll('.popup-close').forEach(function(btn) {
+      btn.addEventListener('click', function() { btn.closest('.popup-overlay').classList.remove('active'); });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.popup-overlay.active').forEach(function(ov) { ov.classList.remove('active'); });
+        if (isOpen) { toggle.click(); }
+      }
+    });
+  
+    // Liquid glass border mouse tracking
+    document.querySelectorAll('.popup').forEach(function(popup) {
+      var borders = popup.querySelectorAll('.glass-border');
+      if (borders.length < 2) return;
+      popup.addEventListener('mousemove', function(e) {
+        var rect = popup.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var ox = ((e.clientX - cx) / rect.width) * 100;
+        var oy = ((e.clientY - cy) / rect.height) * 100;
+        var angle = 135 + ox * 1.2;
+        var s1 = Math.max(10, 33 + oy * 0.3);
+        var s2 = Math.min(90, 66 + oy * 0.4);
+        borders[0].style.background = 'linear-gradient(' + angle + 'deg, rgba(255,255,255,0) 0%, rgba(255,255,255,' + (0.15 + Math.abs(ox) * 0.008).toFixed(3) + ') ' + s1.toFixed(1) + '%, rgba(255,255,255,' + (0.45 + Math.abs(ox) * 0.012).toFixed(3) + ') ' + s2.toFixed(1) + '%, rgba(255,255,255,0) 100%)';
+        borders[1].style.background = 'linear-gradient(' + angle + 'deg, rgba(255,255,255,0) 0%, rgba(255,255,255,' + (0.35 + Math.abs(ox) * 0.008).toFixed(3) + ') ' + s1.toFixed(1) + '%, rgba(255,255,255,' + (0.65 + Math.abs(ox) * 0.012).toFixed(3) + ') ' + s2.toFixed(1) + '%, rgba(255,255,255,0) 100%)';
+      });
+    });
+  </script>
+</body>
+</html>
