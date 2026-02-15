@@ -4,7 +4,7 @@
  * Bella can edit the .md files on GitHub without touching HTML.
  */
 
-var ORCID_ID = '0009-0001-3527-6782';
+var SEMANTIC_SCHOLAR_ID = '2305591080';
 
 // SVG icons for contact section
 var CONTACT_ICONS = {
@@ -124,7 +124,7 @@ function loadContent(basePath) {
 }
 
 /**
- * Fetch publications from ORCID API + CrossRef for author enrichment
+ * Fetch publications from Semantic Scholar API
  */
 function loadPublications() {
   var overlay = document.getElementById('popup-publications');
@@ -141,71 +141,35 @@ function loadPublications() {
     overlay.classList.remove('active');
   });
 
-  fetch('https://pub.orcid.org/v3.0/' + ORCID_ID + '/works', {
-    headers: { 'Accept': 'application/json' }
-  })
+  fetch('https://api.semanticscholar.org/graph/v1/author/' + SEMANTIC_SCHOLAR_ID + '/papers?fields=title,year,venue,externalIds,authors&limit=50')
     .then(function(res) {
-      if (!res.ok) throw new Error('Failed to fetch from ORCID');
+      if (!res.ok) throw new Error('Failed to fetch from Semantic Scholar');
       return res.json();
     })
     .then(function(data) {
-      var works = data.group || [];
-      if (works.length === 0) {
+      var papers = data.data || [];
+      if (papers.length === 0) {
         popup.querySelector('p:last-child').textContent = 'No publications found.';
         return;
       }
 
-      return Promise.all(works.map(function(work) {
-        var summary = work['work-summary'][0];
-        var putCode = summary['put-code'];
-        var title = (summary.title && summary.title.title) ? summary.title.title.value : 'Untitled';
-        var year = (summary['publication-date'] && summary['publication-date'].year) ? summary['publication-date'].year.value : '';
-        var journal = summary['journal-title'] ? summary['journal-title'].value : 'Preprint';
-
-        // Get DOI
-        var externalIds = (summary['external-ids'] && summary['external-ids']['external-id']) || [];
-        var doiObj = null;
-        for (var i = 0; i < externalIds.length; i++) {
-          if (externalIds[i]['external-id-type'] === 'doi') { doiObj = externalIds[i]; break; }
+      // Deduplicate papers that share a DOI (e.g. preprint + published version)
+      var seen = {};
+      var publications = [];
+      papers.forEach(function(p) {
+        var doi = (p.externalIds && p.externalIds.DOI) || null;
+        var key = doi || p.title;
+        if (!seen[key]) {
+          seen[key] = true;
+          publications.push({
+            title: p.title || 'Untitled',
+            year: p.year || '',
+            venue: p.venue || 'Preprint',
+            doi: doi,
+            authors: (p.authors || []).map(function(a) { return a.name; })
+          });
         }
-        var doi = doiObj ? doiObj['external-id-value'] : null;
-
-        // Fetch authors from ORCID contributors
-        var orcidAuthorsPromise = fetch('https://pub.orcid.org/v3.0/' + ORCID_ID + '/work/' + putCode, {
-          headers: { 'Accept': 'application/json' }
-        })
-          .then(function(r) { return r.ok ? r.json() : null; })
-          .then(function(d) {
-            if (!d || !d.contributors || !d.contributors.contributor) return [];
-            return d.contributors.contributor
-              .map(function(c) { return (c['credit-name'] && c['credit-name'].value) || ''; })
-              .filter(function(n) { return n; });
-          })
-          .catch(function() { return []; });
-
-        // Fetch authors from CrossRef (usually more complete)
-        var crossrefPromise = doi ? fetch(
-          'https://api.crossref.org/works?filter=doi:' + encodeURIComponent(doi)
-        )
-          .then(function(r) { return r.ok ? r.json() : null; })
-          .then(function(d) {
-            if (!d || !d.message || !d.message.items || !d.message.items.length) return [];
-            return (d.message.items[0].author || [])
-              .map(function(a) { return ((a.given || '') + ' ' + (a.family || '')).trim(); })
-              .filter(function(n) { return n; });
-          })
-          .catch(function() { return []; }) : Promise.resolve([]);
-
-        return Promise.all([orcidAuthorsPromise, crossrefPromise]).then(function(results) {
-          var orcidAuthors = results[0];
-          var crossrefAuthors = results[1];
-          var authors = crossrefAuthors.length >= orcidAuthors.length ? crossrefAuthors : orcidAuthors;
-          return { title: title, year: year, journal: journal, doi: doi, authors: authors };
-        });
-      }));
-    })
-    .then(function(publications) {
-      if (!publications) return;
+      });
 
       // Sort by year descending
       publications.sort(function(a, b) { return (b.year || 0) - (a.year || 0); });
@@ -234,7 +198,7 @@ function loadPublications() {
           '<p class="pub-year">' + pub.year + '</p>' +
           '<p class="pub-title">' + (link ? '<a href="' + link + '" target="_blank" rel="noopener">' + pub.title + '</a>' : pub.title) + '</p>' +
           (authorsHtml ? '<p class="pub-authors">' + authorsHtml + '</p>' : '') +
-          '<p class="pub-journal">' + pub.journal + '</p>' +
+          '<p class="pub-journal">' + pub.venue + '</p>' +
           '</div>';
       });
 
