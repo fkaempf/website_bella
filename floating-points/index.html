@@ -202,41 +202,47 @@
       flex-shrink: 0;
     }
 
-    /* Cursor-click blink animation */
+    /* Cursor-click blink animation (JS polyrhythm) */
     .dot-circle::before {
       content: '';
       position: absolute; inset: -6px;
       border-radius: 50%;
       border: 1.5px solid rgba(142, 197, 252, 0.5);
       opacity: 0;
-      animation: clickBlink 4s ease-in-out infinite;
     }
-
     .dot-circle::after {
       content: '';
       position: absolute; inset: -2px;
       border-radius: 50%;
       background: rgba(142, 197, 252, 0.15);
       opacity: 0;
-      animation: clickBlink 4s ease-in-out infinite;
-      animation-delay: 0.1s;
     }
+    .dot-circle.blink-1::before { animation: blinkRing 0.7s ease-out forwards; }
+    .dot-circle.blink-1::after  { animation: blinkGlow 0.5s ease-out 0.04s forwards; }
+    .dot-circle.blink-2::before { animation: blinkRingSoft 1s ease-out forwards; }
+    .dot-circle.blink-2::after  { animation: blinkGlowSoft 0.7s ease-out 0.06s forwards; }
+    .dot-circle.blink-3::before { animation: blinkRing 0.5s ease-out forwards; }
+    .dot-circle.blink-3::after  { animation: blinkGlow 0.4s ease-out 0.02s forwards; }
 
-    .nav-dot:nth-child(1) .dot-circle::before,
-    .nav-dot:nth-child(1) .dot-circle::after { animation-delay: 0s; }
-    .nav-dot:nth-child(2) .dot-circle::before,
-    .nav-dot:nth-child(2) .dot-circle::after { animation-delay: 1s; }
-    .nav-dot:nth-child(3) .dot-circle::before,
-    .nav-dot:nth-child(3) .dot-circle::after { animation-delay: 2s; }
-    .nav-dot:nth-child(4) .dot-circle::before,
-    .nav-dot:nth-child(4) .dot-circle::after { animation-delay: 3s; }
-    .nav-dot:nth-child(5) .dot-circle::before,
-    .nav-dot:nth-child(5) .dot-circle::after { animation-delay: 4s; }
-
-    @keyframes clickBlink {
-      0%, 85%, 100% { opacity: 0; transform: scale(1); }
-      90% { opacity: 1; transform: scale(1.8); }
-      95% { opacity: 0.3; transform: scale(2.2); }
+    @keyframes blinkRing {
+      0% { opacity: 0; transform: scale(1); }
+      30% { opacity: 1; transform: scale(1.6); }
+      100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes blinkGlow {
+      0% { opacity: 0; transform: scale(1); }
+      25% { opacity: 0.8; transform: scale(1.3); }
+      100% { opacity: 0; transform: scale(1.8); }
+    }
+    @keyframes blinkRingSoft {
+      0% { opacity: 0; transform: scale(1); }
+      20% { opacity: 0.5; transform: scale(1.3); }
+      100% { opacity: 0; transform: scale(2.0); }
+    }
+    @keyframes blinkGlowSoft {
+      0% { opacity: 0; transform: scale(1); }
+      20% { opacity: 0.4; transform: scale(1.15); }
+      100% { opacity: 0; transform: scale(1.5); }
     }
 
     .dot-label {
@@ -723,6 +729,43 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') document.querySelectorAll('.popup-overlay.active').forEach(function(ov) { ov.classList.remove('active'); });
     });
+
+    // === Polyrhythmic dot blinking ===
+    // Each dot gets a prime-based interval so they never align.
+    // Occasional double-blinks and varied intensities for organic feel.
+    (function() {
+      var dots = document.querySelectorAll('.dot-circle');
+      var primes = [2.3, 3.1, 3.7, 4.3, 5.3]; // base seconds per dot
+      var styles = ['blink-1', 'blink-2', 'blink-3'];
+
+      dots.forEach(function(dot, i) {
+        var base = primes[i % primes.length] * 1000;
+
+        function scheduleBlink() {
+          // Random jitter: 60-140% of base interval
+          var wait = base * (0.6 + Math.random() * 0.8);
+          setTimeout(function() {
+            var style = styles[Math.floor(Math.random() * styles.length)];
+            dot.classList.add(style);
+            setTimeout(function() { dot.classList.remove(style); }, 1100);
+
+            // 25% chance of a quick double-blink
+            if (Math.random() < 0.25) {
+              setTimeout(function() {
+                var s2 = styles[Math.floor(Math.random() * styles.length)];
+                dot.classList.add(s2);
+                setTimeout(function() { dot.classList.remove(s2); }, 800);
+              }, 300 + Math.random() * 400);
+            }
+
+            scheduleBlink();
+          }, wait);
+        }
+
+        // Stagger initial start with randomness
+        setTimeout(scheduleBlink, Math.random() * primes[i % primes.length] * 1000);
+      });
+    })();
   </script>
 
   <!-- Three.js Neuron -->
