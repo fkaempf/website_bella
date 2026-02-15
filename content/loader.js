@@ -6,6 +6,11 @@
 
 var SEMANTIC_SCHOLAR_ID = '2305591080';
 
+// Papers with co-first authorship (DOI → list of co-first author name patterns)
+var CO_FIRST_AUTHORS = {
+  '10.1101/2025.10.09.680999': ['Berg', 'Beckett', 'Costa', 'Schlegel']
+};
+
 // SVG icons for contact section
 var CONTACT_ICONS = {
   scholar: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>',
@@ -179,7 +184,8 @@ function loadPublications() {
         '<p class="popup-label">Publications</p>';
 
       publications.forEach(function(pub) {
-        // Shorten names to initials + last name, bold Isabella
+        // Shorten names to initials + last name, bold Isabella, add co-first-author stars
+        var coFirst = pub.doi ? CO_FIRST_AUTHORS[pub.doi] || [] : [];
         var authorsHtml = '';
         if (pub.authors.length > 0) {
           var formatted = pub.authors.map(function(name) {
@@ -187,10 +193,15 @@ function loadPublications() {
             if (parts.length < 2) return name;
             var lastName = parts[parts.length - 1];
             var initials = parts.slice(0, -1).map(function(p) { return p[0] + '.'; }).join(' ');
-            return initials + ' ' + lastName;
+            var short = initials + ' ' + lastName;
+            // Append * for co-first authors
+            for (var c = 0; c < coFirst.length; c++) {
+              if (lastName === coFirst[c]) { short += '*'; break; }
+            }
+            return short;
           });
           authorsHtml = formatted.join(', ')
-            .replace(/(I\.\s*(?:R\.\s*)?Beckett)/gi, '<span class="me">$1</span>');
+            .replace(/(I\.\s*(?:R\.\s*)?Beckett\*?)/gi, '<span class="me">$1</span>');
         }
 
         var link = pub.doi ? 'https://doi.org/' + pub.doi : '';
