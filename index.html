@@ -55,8 +55,8 @@
     /* Neuron canvas — on top of gradient, behind text */
     #neuron-canvas {
       position: fixed;
-      top: 0; right: 0;
-      width: 65vw; height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       z-index: 2;
       pointer-events: none;
     }
@@ -145,7 +145,7 @@
 
     @media (max-width: 768px) {
       .text-side { max-width: 100%; padding: 3rem 2rem; text-align: center; align-items: center; }
-      #neuron-canvas { left: 0; right: auto; width: 100vw; opacity: 0.35; }
+      #neuron-canvas { opacity: 0.35; }
     }
   </style>
 </head>
@@ -181,7 +181,7 @@
     /* Three.js — right half canvas */
     const canvas = document.getElementById('neuron-canvas');
     const isMobile = () => window.innerWidth <= 768;
-    const W = () => isMobile() ? window.innerWidth : Math.floor(window.innerWidth * 0.65);
+    const W = () => window.innerWidth;
     const H = () => window.innerHeight;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -213,7 +213,7 @@
       renderer.setSize(W(), H());
       camera.position.z = isMobile() ? 450 : 250;
       if (neuronGroup) {
-        neuronGroup.position.x = isMobile() ? 0 : -45;
+        neuronGroup.position.x = isMobile() ? 0 : 80;
       }
     }
     window.addEventListener('resize', updateLayout);
