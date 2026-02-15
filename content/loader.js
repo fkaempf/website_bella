@@ -14,11 +14,24 @@ var CONTACT_ICONS = {
 };
 
 /**
+ * Process inline markdown formatting:
+ *   [text](url)  → hyperlink
+ *   **text**     → bold
+ *   *text*       → italic
+ */
+function formatInline(text) {
+  return text
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+/**
  * Parse about.md — paragraphs separated by blank lines
  */
 function parseAbout(text) {
   return text.trim().split(/\n\s*\n/).map(function(p) {
-    return '<p>' + p.trim() + '</p>';
+    return '<p>' + formatInline(p.trim()) + '</p>';
   }).join('\n');
 }
 
@@ -41,8 +54,8 @@ function parseBlocks(text) {
     }
     return '<div class="research-block">' +
       '<span class="research-tag">' + tag + '</span>' +
-      '<h3>' + title + '</h3>' +
-      '<p>' + body.join(' ') + '</p>' +
+      '<h3>' + formatInline(title) + '</h3>' +
+      '<p>' + formatInline(body.join(' ')) + '</p>' +
       '</div>';
   }).join('\n');
 }

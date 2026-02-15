@@ -13,6 +13,25 @@ All the text on your website is stored in simple text files in this `content/` f
 
 ---
 
+## Text Formatting
+
+You can use these anywhere in your text (about, research, cv):
+
+| What you type | What it looks like |
+|---|---|
+| `**bold text**` | **bold text** |
+| `*italic text*` | *italic text* |
+| `[link text](https://example.com)` | [link text](https://example.com) |
+
+Example:
+
+```
+I work on **connectomics** in *Drosophila* at the
+[MRC Laboratory of Molecular Biology](https://www2.mrc-lmb.cam.ac.uk).
+```
+
+---
+
 ## File Guide
 
 ### `about.md` — About section
