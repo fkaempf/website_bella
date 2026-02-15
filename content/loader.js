@@ -86,6 +86,101 @@ function parseContact(text) {
 }
 
 /**
+ * Load meta.md and inject <meta>, Open Graph, Twitter Card, and structured data tags
+ */
+function loadMeta(basePath) {
+  fetch(basePath + 'meta.md')
+    .then(function(res) {
+      if (!res.ok) throw new Error('Failed to load meta.md');
+      return res.text();
+    })
+    .then(function(text) {
+      var meta = {};
+      text.trim().split('\n').forEach(function(line) {
+        if (!line.trim()) return;
+        var idx = line.indexOf('|');
+        if (idx < 0) return;
+        var key = line.substring(0, idx).trim();
+        var val = line.substring(idx + 1).trim();
+        meta[key] = val;
+      });
+
+      var head = document.head;
+
+      // Page title
+      if (meta.title) document.title = meta.title;
+
+      // Standard meta tags
+      function setMeta(name, content) {
+        if (!content) return;
+        var el = head.querySelector('meta[name="' + name + '"]');
+        if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); head.appendChild(el); }
+        el.setAttribute('content', content);
+      }
+      setMeta('description', meta.description);
+      setMeta('author', meta.author);
+      setMeta('keywords', meta.keywords);
+      setMeta('robots', 'index, follow');
+
+      // Open Graph
+      function setOG(prop, content) {
+        if (!content) return;
+        var el = head.querySelector('meta[property="og:' + prop + '"]');
+        if (!el) { el = document.createElement('meta'); el.setAttribute('property', 'og:' + prop); head.appendChild(el); }
+        el.setAttribute('content', content);
+      }
+      setOG('type', 'website');
+      setOG('locale', 'en_US');
+      setOG('site_name', meta.author);
+      setOG('url', meta.url);
+      setOG('title', meta.title);
+      setOG('description', meta.description);
+      setOG('image', meta.image);
+
+      // Twitter Card
+      function setTwitter(name, content) {
+        if (!content) return;
+        var el = head.querySelector('meta[name="twitter:' + name + '"]');
+        if (!el) { el = document.createElement('meta'); el.setAttribute('name', 'twitter:' + name); head.appendChild(el); }
+        el.setAttribute('content', content);
+      }
+      setTwitter('card', 'summary_large_image');
+      setTwitter('title', meta.title);
+      setTwitter('description', meta.description);
+      setTwitter('image', meta.image);
+
+      // Canonical URL
+      if (meta.url) {
+        var canon = head.querySelector('link[rel="canonical"]');
+        if (!canon) { canon = document.createElement('link'); canon.setAttribute('rel', 'canonical'); head.appendChild(canon); }
+        canon.setAttribute('href', meta.url);
+      }
+
+      // Structured data (JSON-LD)
+      if (meta.author) {
+        var ld = document.createElement('script');
+        ld.type = 'application/ld+json';
+        ld.textContent = JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          'name': meta.author,
+          'url': meta.url || '',
+          'image': meta.image || '',
+          'description': meta.description || '',
+          'sameAs': [
+            'https://scholar.google.com/citations?user=oLSyhNIAAAAJ',
+            'https://orcid.org/0009-0001-3527-6782'
+          ]
+        });
+        head.appendChild(ld);
+      }
+    })
+    .catch(function(err) {
+      console.warn('Meta load error:', err);
+    });
+}
+
+/**
  * Fetch and render markdown content into popup containers
  */
 function loadContent(basePath) {
@@ -263,5 +358,6 @@ function loadPublications() {
 
 // Auto-initialize on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
+  loadMeta('../content/');
   loadContent('../content/');
 });

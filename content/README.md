@@ -107,8 +107,28 @@ email | mailto:your@email.com | your@email.com
 
 ---
 
+### `meta.md` — Website metadata (SEO & social sharing)
+
+Controls how your site appears in Google search results and when shared on social media (Twitter, LinkedIn, etc.). One setting per line: `key | value`
+
+```
+title | Isabella Beckett | Drosophila Connectomics
+description | PhD researcher studying Drosophila connectomics at MRC-LMB, Cambridge.
+author | Isabella Beckett
+keywords | Isabella Beckett, neuroscience, Drosophila, connectomics, MRC-LMB
+url | https://isabellabeckett.com
+image | https://isabellabeckett.com/assets/profile.jpeg
+```
+
+- **title** — appears in browser tab and search results
+- **description** — the snippet shown in Google/social previews
+- **author** — your name
+- **keywords** — search terms (comma-separated)
+- **url** — your website address
+- **image** — the image shown when the site is shared on social media
+
+---
+
 ### Publications
 
-Publications load automatically from your ORCID profile — no editing needed! When you add a new paper to ORCID, it will appear on your website automatically.
-
-Your ORCID: `0009-0001-3527-6782`
+Publications load automatically from your Semantic Scholar profile — no editing needed! When a new paper is indexed by Semantic Scholar, it will appear on your website automatically.
