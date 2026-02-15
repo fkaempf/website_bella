@@ -448,23 +448,10 @@
       animation: clickHint 13s ease-in-out 7s infinite;
       pointer-events: none;
     }
-    .pub-item:first-child .pub-title a::before {
-      content: '';
-      position: absolute; bottom: -4px; left: 0;
-      width: 0; height: 1px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-      box-shadow: 0 0 4px rgba(142, 197, 252, 0.3);
-      animation: clickHintLine 13s ease-in-out 7s infinite;
-      pointer-events: none;
-    }
+    .pub-item:first-child .pub-title a::before { display: none; }
     @keyframes clickHint {
       0%, 85%, 100% { opacity: 0; transform: translateY(-3px); }
       88%, 95% { opacity: 0.7; transform: translateY(0); }
-    }
-    @keyframes clickHintLine {
-      0%, 85%, 100% { width: 0; opacity: 0; }
-      88% { width: 40px; opacity: 1; }
-      95% { width: 40px; opacity: 1; }
     }
 
     @media (max-width: 768px) {
