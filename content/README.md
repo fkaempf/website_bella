@@ -113,7 +113,7 @@ Controls how your site appears in Google search results and when shared on socia
 
 ```
 title | Isabella Beckett | Drosophila Connectomics
-description | PhD researcher studying Drosophila connectomics at MRC-LMB, Cambridge.
+description | Postdoctoral researcher studying Drosophila connectomics at MRC-LMB, Cambridge.
 author | Isabella Beckett
 keywords | Isabella Beckett, neuroscience, Drosophila, connectomics, MRC-LMB
 url | https://isabellabeckett.com

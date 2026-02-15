@@ -1,5 +1,5 @@
 title | Isabella Beckett | Drosophila Connectomics
-description | PhD researcher studying Drosophila connectomics and neural circuit analysis at MRC Laboratory of Molecular Biology, Cambridge.
+description | Postdoctoral researcher studying Drosophila connectomics and neural circuit analysis at MRC Laboratory of Molecular Biology, Cambridge.
 author | Isabella Beckett
 keywords | Isabella Beckett, neuroscience, Drosophila, connectomics, MRC-LMB, Cambridge, University of Cambridge, Jefferis Lab, neural circuits, electron microscopy, circuit analysis, computational neuroscience
 url | https://isabellabeckett.com
