@@ -1,24 +1,24 @@
 Education
 # PhD Neuroscience
-University of Cambridge, MRC Laboratory of Molecular Biology. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+University of Cambridge, MRC Laboratory of Molecular Biology.
 
 ---
 
 Education
-# MSci Natural Sciences
-University of Cambridge. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+# AB Neuroscience
+Harvard University, Cambridge, MA. 
 
 ---
 
 Experience
 # Research Assistant
-MRC Laboratory of Molecular Biology, Neurobiology Division. Ut enim ad minim veniam, quis nostrud exercitation.
+
 
 ---
 
 Skills
 # Computational & Experimental
-Connectomics, neural circuit analysis, Python, R, image registration, electron microscopy data analysis.
+Connectomics, Python, R, image registration, electron microscopy data analysis.
 
 ---
 
