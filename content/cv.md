@@ -37,5 +37,5 @@ Skills
 ---
 
 Awards & Scholarships
-# Boehringer Ingelheim Fonds PhD Fellowship
 # Cambridge Trust LMB Cambridge Scholarship
+# Boehringer Ingelheim Fonds PhD Fellowship
