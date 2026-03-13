@@ -1,15 +1,15 @@
 Current
-# Lorem Ipsum Dolor Sit Amet
-Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+# Connectomic and functional investigations into sexually dimorphic neuronal circuits
+Principally, my work uses a combination of connectomics, behavior, and physiology experiments to (i)
+characterize neuroanatomical and wiring differences in neural circuits across males and females, (ii) identify
+sex-specific and sexually dimorphic hubs in the nervous system, (iii) demonstrate various circuit motifs enabling
+sexually dimorphic sensorimotor transformations, and (iv) characterize how a food-derived olfactory signal
+instructs sexually dimorphic, ethologically relevant behavioral responses.
 
 ---
 
-Methods
-# Sed Ut Perspiciatis Unde Omnis
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+Previous
+# Molecular basis of social behavior 
+My undergraduate thesis work used behavior assays and chemogenetic neuronal manipulation to identify a novel molecular mechanism
+through which oxytocin acts via the prostaglandin receptor EP4 to regulate social huddling during fever in mice. 
 
----
-
-Collaboration
-# At Vero Eos Et Accusamus
-Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate.
