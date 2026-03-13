@@ -1,7 +1,7 @@
 Education
 # PhD Neuroscience
 University of Cambridge, MRC Laboratory of Molecular Biology (2021-2026).
-**Thesis**: Sexually dimorphic neural circuit structure and function in Drosophila melanogaster
+**Thesis**: Sexually dimorphic neural circuit structure and function in *Drosophila melanogaster*
 
 
 ---
@@ -29,7 +29,7 @@ Teaching Fellow for Physical Sciences 11: Frontiers and Foundations in Modern Ch
 Skills
 # Computational & Experimental
 • Connectomics: Natverse (R), NAVis (Python), image registration, electron microscopy data analysis
-• Drosophila biology: dissection, husbandry, genetics, physiology, behavior
+• *Drosophila* biology: dissection, husbandry, genetics, physiology, behavior
 • Microscopy: 2-Photon, Confocal
 • Molecular biology: DNA isolation, PCR, immunohistochemistry, in situ hybridization (FISH)
 • Assay development, behavior scoring, analysis
