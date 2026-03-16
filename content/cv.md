@@ -1,28 +1,24 @@
 Education
 # PhD Neuroscience
-University of Cambridge, MRC Laboratory of Molecular Biology (2021-2026).
-**Thesis**: Sexually dimorphic neural circuit structure and function in *Drosophila melanogaster*
-
+• University of Cambridge, MRC Laboratory of Molecular Biology (2021-2026)
+• **Thesis**: Sexually dimorphic neural circuit structure and function in *Drosophila melanogaster*
 
 ---
 
 Education
 # AB Neuroscience
-Harvard University, Cambridge, MA (2017-2021). 
-**Thesis**: Molecular mechanisms mediating the effect of fever on social behavior in mice (High Magna Cum Laude)
-**Coursework**: Molecular Basis of Behavior, Neurobiology of Behavior, Sex and the Brain, Neurobiology of Vision
-and Blindness, Integrated Biology (Molecular Biology and Cell Biology & Genetics, Genomics and Evolution),
-Physics (Mechanics and Fluids & Electromagnetism, Waves, Circuits, and Optics)
+• Harvard University, Cambridge, MA (2017-2021)
+• **Thesis**: Molecular mechanisms mediating the effect of fever on social behavior in mice (High Magna Cum Laude)
+• **Coursework**: Molecular Basis of Behavior, Neurobiology of Behavior, Sex and the Brain, Neurobiology of Vision and Blindness, Integrated Biology (Molecular Biology and Cell Biology & Genetics, Genomics and Evolution), Physics (Mechanics and Fluids & Electromagnetism, Waves, Circuits, and Optics)
 
 ---
 
 Experience
-# Teaching 
-Undergraduate Supervisor for Part 1A Natural Sciences: "Evolution & Behaviour" and Part II Zoology: "Evolution & Behaviour: Genes and Individuals" (University of Cambridge)
-Laboratory Summer Project Supervisor (MRC LMB)
-Laboratory Project Supervisor for Part II Zoology (University of Cambridge)
-Teaching Fellow for Physical Sciences 11: Frontiers and Foundations in Modern Chemistry (Harvard University)
-
+# Teaching
+• Undergraduate Supervisor for Part 1A Natural Sciences: "Evolution & Behaviour" and Part II Zoology: "Evolution & Behaviour: Genes and Individuals" (University of Cambridge)
+• Laboratory Summer Project Supervisor (MRC LMB)
+• Laboratory Project Supervisor for Part II Zoology (University of Cambridge)
+• Teaching Fellow for Physical Sciences 11: Frontiers and Foundations in Modern Chemistry (Harvard University)
 
 ---
 
@@ -38,4 +34,10 @@ Skills
 
 Awards & Scholarships
 # Cambridge Trust LMB Cambridge Scholarship
+Full funding for PhD research at the MRC Laboratory of Molecular Biology, University of Cambridge.
+
+---
+
+Awards & Scholarships
 # Boehringer Ingelheim Fonds PhD Fellowship
+Competitive international fellowship supporting outstanding PhD students in biomedical research.

@@ -48,19 +48,41 @@ function parseBlocks(text) {
   return text.trim().split(/\n---\n/).map(function(block) {
     var lines = block.trim().split('\n');
     var tag = lines[0].trim();
-    var title = '';
+    var titles = [];
     var body = [];
     for (var i = 1; i < lines.length; i++) {
       if (lines[i].trim().indexOf('# ') === 0) {
-        title = lines[i].trim().substring(2);
+        titles.push(lines[i].trim().substring(2));
       } else if (lines[i].trim()) {
         body.push(lines[i].trim());
       }
     }
+
+    // Render title(s) — multiple titles become a list
+    var titleHtml = '';
+    if (titles.length === 1) {
+      titleHtml = '<h3>' + formatInline(titles[0]) + '</h3>';
+    } else if (titles.length > 1) {
+      titleHtml = '<ul class="block-list">' + titles.map(function(t) {
+        return '<li><strong>' + formatInline(t) + '</strong></li>';
+      }).join('') + '</ul>';
+    }
+
+    // Render body — detect bullet lines (•)
+    var bodyHtml = '';
+    var hasBullets = body.length > 0 && body[0].indexOf('•') === 0;
+    if (hasBullets) {
+      bodyHtml = '<ul class="block-list">' + body.map(function(line) {
+        return '<li>' + formatInline(line.replace(/^•\s*/, '')) + '</li>';
+      }).join('') + '</ul>';
+    } else if (body.length > 0) {
+      bodyHtml = '<p>' + formatInline(body.join(' ')) + '</p>';
+    }
+
     return '<div class="research-block">' +
       '<span class="research-tag">' + tag + '</span>' +
-      '<h3>' + formatInline(title) + '</h3>' +
-      '<p>' + formatInline(body.join(' ')) + '</p>' +
+      titleHtml +
+      bodyHtml +
       '</div>';
   }).join('\n');
 }
